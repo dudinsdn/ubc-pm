@@ -1,0 +1,10 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local Postman data
+.postman/*.local.json
+
+# Environment files containing local/secrets
+postman/**/local*.json
