@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{base_url}}/tenants"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Tenant Bengkel Lain"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.collectionVariables.set('other_tenant_id', body.id);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503598948214223

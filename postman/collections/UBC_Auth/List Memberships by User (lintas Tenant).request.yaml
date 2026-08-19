@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/users/{{user_id}}/memberships"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Status code is 200', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.test('User punya 2 Membership aktif di Tenant berbeda', () => {
+          pm.expect(body).to.be.an('array');
+          const roles = body.map((m) => m.role);
+          pm.expect(roles).to.include.members(['owner', 'staff']);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503599549130563

@@ -1,0 +1,25 @@
+$kind: http-request
+name: Rename Business - versi basi -> 409
+url: "{{base_url}}/businesses/{{business_id}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Nama Telat",
+      "expected_version": {{err_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('409 Conflict (version mismatch)', () => {
+          pm.expect(pm.response.code).to.equal(409);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 3000

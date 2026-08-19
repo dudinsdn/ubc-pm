@@ -1,0 +1,28 @@
+$kind: http-request
+name: Create Relationship - self relationship -> 409
+url: "{{base_url}}/businesses/{{business_id}}/relationships"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "from_customer_id": "{{customer_id}}",
+      "to_customer_id": "{{customer_id}}",
+      "relationship_type": "sibling"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('409 Conflict (self relationship)', () => {
+          pm.expect(pm.response.code).to.equal(409);
+          pm.expect(body.error).to.include('dirinya sendiri');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 1000

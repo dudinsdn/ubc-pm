@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{base_url}}/businesses/{{other_business_id}}/transactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "kind": "service",
+      "amount": 75000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.collectionVariables.set('other_transaction_id', body.id);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503599362578966

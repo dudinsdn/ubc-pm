@@ -1,0 +1,33 @@
+$kind: http-request
+name: Create User With Same ID is Idempotent
+url: "{{base_url}}/users"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "id": "{{user_id}}",
+        "email": "{{email_idemp_a}}",
+        "password": "pass12345678",
+        "full_name": "User Idemp A Same id"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Idempotent create -> 200 OK, data lama tidak berubah', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+    language: text/javascript
+  - type: beforeRequest
+    code: |-
+      const random = Math.random().toString(36).substring(2, 10);
+      pm.collectionVariables.set("email_idemp_a", `user_${random}@ubc.xyz`);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4500382322812766

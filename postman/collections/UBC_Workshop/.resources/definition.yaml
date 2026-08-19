@@ -1,0 +1,74 @@
+$kind: collection
+name: UBC_Workshop
+description: ""
+variables:
+  base_url: http://localhost:3000
+  err_version: "999"
+  tenant_id: ""
+  tenant_version: ""
+  business_version: ""
+  business_id: ""
+  customer_version: ""
+  customer_id: ""
+  customer_b_id: ""
+  service_order_version: ""
+  service_order_id: ""
+  transaction_id: ""
+  service_order_cancel_id: ""
+  service_order_cancel_version: ""
+  service_order_err_version: ""
+  service_order_err_id: ""
+  other_tenant_id: ""
+  other_business_id: ""
+  other_transaction_id: ""
+  interaction_version: ""
+  interaction_id: ""
+  relationship_version: ""
+  relationship_id: ""
+  transaction_version: ""
+  customer_b_version: ""
+  uuid_404: ""
+  tenant_uuid7_generator: ""
+  tenant_version_gen: ""
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      pm.collectionVariables.set('uuid_404', uuidv7());
+
+      function uuidv7() {
+          const timestamp = Date.now();
+
+          const bytes = new Uint8Array(16);
+
+          // Random bytes menggunakan Math.random()
+          for (let i = 0; i < 16; i++) {
+              bytes[i] = Math.floor(Math.random() * 256);
+          }
+
+          // 48-bit Unix timestamp milliseconds
+          bytes[0] = Math.floor(timestamp / 2 ** 40) & 0xff;
+          bytes[1] = Math.floor(timestamp / 2 ** 32) & 0xff;
+          bytes[2] = Math.floor(timestamp / 2 ** 24) & 0xff;
+          bytes[3] = Math.floor(timestamp / 2 ** 16) & 0xff;
+          bytes[4] = Math.floor(timestamp / 2 ** 8) & 0xff;
+          bytes[5] = timestamp & 0xff;
+
+          // Version 7
+          bytes[6] = (bytes[6] & 0x0f) | 0x70;
+
+          // RFC 9562 variant
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+          const hex = Array.from(bytes)
+              .map(b => b.toString(16).padStart(2, '0'))
+              .join('');
+
+          return [
+              hex.slice(0, 8),
+              hex.slice(8, 12),
+              hex.slice(12, 16),
+              hex.slice(16, 20),
+              hex.slice(20, 32)
+          ].join('-');
+      }
+    language: text/javascript

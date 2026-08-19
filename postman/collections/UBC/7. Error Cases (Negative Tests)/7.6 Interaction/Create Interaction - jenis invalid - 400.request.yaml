@@ -1,0 +1,25 @@
+$kind: http-request
+name: Create Interaction - jenis invalid -> 400
+url: "{{base_url}}/businesses/{{business_id}}/interactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "interaction_type": "phone call!"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('400 Bad Request (jenis invalid)', () => {
+          pm.expect(pm.response.code).to.equal(400);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 3000

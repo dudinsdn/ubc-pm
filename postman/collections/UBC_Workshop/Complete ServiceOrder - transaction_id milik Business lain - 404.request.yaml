@@ -1,0 +1,26 @@
+$kind: http-request
+name: Complete ServiceOrder - transaction_id milik Business lain -> 404
+url: "{{base_url}}/service-orders/{{service_order_err_id}}/complete"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{service_order_err_version}},
+      "transaction_id": "{{other_transaction_id}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('404 Not Found (transaction bukan milik business ini, info-hiding)', () => {
+          pm.expect(pm.response.code).to.equal(404);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503599374372600

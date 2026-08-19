@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/businesses/{{business_id}}/relationships"
+method: GET
+queryParams:
+  - key: updated_since
+    value: ""
+    disabled: true
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('List Relationships -> 200 OK', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2000

@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{base_url}}/users/{{user_id}}/memberships"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "tenant_id": "{{tenant_c_id}}",
+        "role": "staff"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Membership demo created successfully', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('membership_demo_id', body.id);
+      pm.collectionVariables.set('membership_demo_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503599602248227

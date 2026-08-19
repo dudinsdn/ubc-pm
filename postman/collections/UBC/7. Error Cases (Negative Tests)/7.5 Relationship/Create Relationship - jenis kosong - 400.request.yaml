@@ -1,0 +1,26 @@
+$kind: http-request
+name: Create Relationship - jenis kosong -> 400
+url: "{{base_url}}/businesses/{{business_id}}/relationships"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "from_customer_id": "{{customer_id}}",
+      "to_customer_id": "{{customer_b_id}}",
+      "relationship_type": "   "
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('400 Bad Request (jenis kosong)', () => {
+          pm.expect(pm.response.code).to.equal(400);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2000

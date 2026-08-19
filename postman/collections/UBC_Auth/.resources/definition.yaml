@@ -1,0 +1,65 @@
+$kind: collection
+name: UBC_Auth
+description: ""
+variables:
+  base_url: http://localhost:3000
+  email: ""
+  user_id: ""
+  user_version: ""
+  email_idemp_a: ""
+  email_idemp_b: ""
+  user_idemp_b_id: ""
+  user_idem_b_version: ""
+  tenant_a_id: ""
+  tenant_b_id: ""
+  tenant_c_id: ""
+  membership_a_id: ""
+  membership_a_version: ""
+  membership_b_id: ""
+  membership_b_version: ""
+  membership_demo_id: ""
+  membership_demo_version: ""
+  ramdom_uuid_404: ""
+  random_uuid_404: ""
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      pm.collectionVariables.set('random_uuid_404', uuidv7());
+
+      function uuidv7() {
+          const timestamp = Date.now();
+
+          const bytes = new Uint8Array(16);
+
+          // Random bytes menggunakan Math.random()
+          for (let i = 0; i < 16; i++) {
+              bytes[i] = Math.floor(Math.random() * 256);
+          }
+
+          // 48-bit Unix timestamp milliseconds
+          bytes[0] = Math.floor(timestamp / 2 ** 40) & 0xff;
+          bytes[1] = Math.floor(timestamp / 2 ** 32) & 0xff;
+          bytes[2] = Math.floor(timestamp / 2 ** 24) & 0xff;
+          bytes[3] = Math.floor(timestamp / 2 ** 16) & 0xff;
+          bytes[4] = Math.floor(timestamp / 2 ** 8) & 0xff;
+          bytes[5] = timestamp & 0xff;
+
+          // Version 7
+          bytes[6] = (bytes[6] & 0x0f) | 0x70;
+
+          // RFC 9562 variant
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+          const hex = Array.from(bytes)
+              .map(b => b.toString(16).padStart(2, '0'))
+              .join('');
+
+          return [
+              hex.slice(0, 8),
+              hex.slice(8, 12),
+              hex.slice(12, 16),
+              hex.slice(16, 20),
+              hex.slice(20, 32)
+          ].join('-');
+      }
+    language: text/javascript

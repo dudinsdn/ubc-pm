@@ -1,0 +1,29 @@
+$kind: http-request
+url: "{{base_url}}/businesses/{{business_id}}/interactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "interaction_type": "call",
+      "note": "Follow up jadwal kontrol",
+      "occurred_at": "2026-08-08T02:00:00Z"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Interaction -> 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('interaction_id', body.id);
+      pm.collectionVariables.set('interaction_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 1000

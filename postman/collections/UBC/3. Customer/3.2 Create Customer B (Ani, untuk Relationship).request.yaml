@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{base_url}}/businesses/{{business_id}}/customers"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Ani Wijaya"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Customer B -> 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('customer_b_id', body.id);
+      pm.collectionVariables.set('customer_b_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2000

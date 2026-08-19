@@ -1,0 +1,27 @@
+$kind: http-request
+name: 1.4 Rename Tenant
+url: "{{base_url}}/tenants/{{tenant_id}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+    	"name": "Tenant A Baru",
+    	"expected_version": {{tenant_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Response status code is 200', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('tenant_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4000

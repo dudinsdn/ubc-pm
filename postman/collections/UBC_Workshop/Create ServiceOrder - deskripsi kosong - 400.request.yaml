@@ -1,0 +1,26 @@
+$kind: http-request
+name: Create ServiceOrder - deskripsi kosong -> 400
+url: "{{base_url}}/businesses/{{business_id}}/service-orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "description": "   "
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('400 Bad Request (deskripsi kosong)', () => {
+          pm.expect(pm.response.code).to.equal(400);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503566337173157
