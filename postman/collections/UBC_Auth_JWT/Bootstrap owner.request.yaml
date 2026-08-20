@@ -1,0 +1,19 @@
+$kind: http-request
+name: Bootstrap owner
+url: "{{base_url}}/users/{{user_id}}/memberships/bootstrap-owner"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+    	"tenant_id": "{{tenant_id}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Status code is 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+    language: text/javascript
+order: 3736963358615630

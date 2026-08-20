@@ -1,0 +1,31 @@
+$kind: http-request
+name: login
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+    	"tenant_id": "{{tenant_id}}",
+    	"email": "{{email}}",
+    	"password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Login successfully', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('token', body.token);
+    language: text/javascript
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4291849531424813
