@@ -1,0 +1,31 @@
+$kind: http-request
+name: Create User A Membership Staff Tenant B
+url: "{{base_url}}/users/{{user_id}}/memberships"
+method: POST
+headers:
+  Content-Type: application/json
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_b}}"
+body:
+  type: json
+  content: |-
+    {
+      "tenant_id": "{{tenant_b_id}}",
+      "role": "staff"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner B menambahkan User A sebagai Staff', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('user_id'));
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_b_id'));
+          pm.expect(body.role).to.equal('staff');
+      });
+      pm.collectionVariables.set('membership_b_id', body.id);
+      pm.collectionVariables.set('membership_b_version', body.version);
+    language: text/javascript
+order: 4503560000000000

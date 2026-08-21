@@ -1,12 +1,10 @@
 workspace:
   id: 1eea872e-d45e-40b5-b105-f8bbec6a59c6
-
-# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
-
 cloudResources:
   collections:
     ../postman/collections/UBC: 19505039-177408ac-83f1-48ae-9afa-5bff61b441a2
     ../postman/collections/UBC_Workshop: 19505039-d7949548-89b5-45f6-8c27-0e92a3ab3bbf
     ../postman/collections/UBC_Auth: 19505039-817aaa21-ef43-4849-83de-0e85a1821bab
+    ../postman/collections/UBC_Auth_JWT: 19505039-e0ca1b2e-1bf7-4adc-a87f-a6740bafcfe6
   environments: {}
   globals: {}

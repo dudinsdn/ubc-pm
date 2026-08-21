@@ -15,5 +15,11 @@ scripts:
       pm.test('Status code is 201 Created', () => {
           pm.expect(pm.response.code).to.equal(201);
       });
+      pm.test('Membership pertama selalu Owner pada Tenant A', () => {
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('user_id'));
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_id'));
+          pm.expect(body.role).to.equal('owner');
+          pm.expect(body.version).to.equal(0);
+      });
     language: text/javascript
 order: 3736963358615630

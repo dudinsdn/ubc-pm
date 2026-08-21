@@ -1,0 +1,26 @@
+$kind: http-request
+name: Login Owner B
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tenant_id": "{{tenant_b_id}}",
+      "email": "{{owner_b_email}}",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner B login dengan scope Tenant B', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_b_id'));
+          pm.expect(body.role).to.equal('owner');
+      });
+      pm.collectionVariables.set('token_b', body.token);
+    language: text/javascript
+order: 4503550000000000

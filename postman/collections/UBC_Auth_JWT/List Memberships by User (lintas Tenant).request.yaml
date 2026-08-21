@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{base_url}}/users/{{user_id}}"
+url: "{{base_url}}/users/{{user_id}}/memberships"
 method: GET
 auth:
   type: bearer
@@ -12,15 +12,15 @@ scripts:
       pm.test('Status code is 200', () => {
           pm.expect(pm.response.code).to.equal(200);
       });
-      pm.test('Response sesuai User A', () => {
-          pm.expect(body.id).to.equal(pm.collectionVariables.get('user_id'));
-          pm.expect(body.email).to.equal(pm.collectionVariables.get('email'));
-          pm.expect(body.version).to.be.a('number');
-          pm.expect(body.is_deleted).to.equal(false);
+      pm.test('User punya 2 Membership aktif di Tenant berbeda', () => {
+          pm.expect(body).to.be.an('array');
+          pm.expect(body).to.have.lengthOf(2);
+          const roles = body.map((m) => m.role);
+          pm.expect(roles).to.include.members(['owner', 'staff']);
       });
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4397195326832777
+order: 4503599549130563

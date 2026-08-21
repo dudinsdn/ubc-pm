@@ -1,0 +1,29 @@
+$kind: http-request
+name: Create Owner User B
+url: "{{base_url}}/users"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{owner_b_email}}",
+      "password": "password123",
+      "full_name": "Owner Tenant B"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      const random = Math.random().toString(36).substring(2, 10);
+      pm.collectionVariables.set('owner_b_email', `owner_b_${random}@ubc.xyz`);
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner User B created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('owner_b_user_id', body.id);
+    language: text/javascript
+order: 4503530000000000
