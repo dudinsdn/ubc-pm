@@ -1,5 +1,6 @@
 $kind: http-request
-url: "{{base_url}}/users/{{user_id}}/memberships"
+name: Bootstrap Membership Owner - Tenant A
+url: "{{base_url}}/users/{{user_id}}/memberships/bootstrap-owner"
 method: POST
 headers:
   Content-Type: application/json
@@ -7,8 +8,7 @@ body:
   type: json
   content: |-
     {
-        "tenant_id": "{{tenant_a_id}}",
-        "role": "owner"
+        "tenant_id": "{{tenant_a_id}}"
     }
 scripts:
   - type: afterResponse
@@ -24,4 +24,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4503598902784766
+order: 4360000000000000

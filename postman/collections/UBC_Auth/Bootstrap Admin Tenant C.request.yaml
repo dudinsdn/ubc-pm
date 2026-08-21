@@ -1,5 +1,6 @@
 $kind: http-request
-url: "{{base_url}}/tenants"
+name: Bootstrap Admin Tenant C
+url: "{{base_url}}/users/{{admin_user_id}}/memberships/bootstrap-owner"
 method: POST
 headers:
   Content-Type: application/json
@@ -7,19 +8,15 @@ body:
   type: json
   content: |-
     {
-        "name": "Tenant A for Membership A"
+      "tenant_id": "{{tenant_c_id}}"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Tenant A created successfully', () => {
+      pm.test('Admin menjadi Owner Tenant C', () => {
           pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.role).to.equal('owner');
       });
-      pm.collectionVariables.set('tenant_a_id', body.id);
     language: text/javascript
-settings:
-  followRedirects: true
-  disableUrlEncoding: false
-  disableCookies: false
-order: 4350000000000000
+order: 4503595900000000

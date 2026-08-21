@@ -1,0 +1,29 @@
+$kind: http-request
+name: Create Admin User Tenant B-C
+url: "{{base_url}}/users"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{admin_email}}",
+      "password": "password123",
+      "full_name": "Admin Tenant B dan C"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      const random = Math.random().toString(36).substring(2, 10);
+      pm.collectionVariables.set('admin_email', `admin_${random}@ubc.xyz`);
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Admin Tenant B-C berhasil dibuat', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('admin_user_id', body.id);
+    language: text/javascript
+order: 4503530000000000

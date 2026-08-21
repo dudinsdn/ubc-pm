@@ -1,6 +1,10 @@
 $kind: http-request
 url: "{{base_url}}/memberships/{{membership_b_id}}/role"
 method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_b}}"
 headers:
   Content-Type: application/json
 body:
@@ -23,4 +27,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4503599586383670
+order: 4503590000000000

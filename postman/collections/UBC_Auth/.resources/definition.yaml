@@ -1,8 +1,19 @@
 $kind: collection
 name: UBC_Auth
-description: ""
+description: |-
+  Auth API dengan JWT yang di-scope per Tenant. Collection membuat Owner dan
+  token setiap Tenant secara otomatis sebelum menjalankan operasi terproteksi.
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 variables:
   base_url: http://localhost:3000
+  token: ""
+  token_b: ""
+  token_c: ""
+  admin_email: ""
+  admin_user_id: ""
   email: ""
   user_id: ""
   user_version: ""

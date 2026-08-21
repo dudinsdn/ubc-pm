@@ -1,6 +1,10 @@
 $kind: http-request
 url: "{{base_url}}/users/{{user_id}}/memberships"
 method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_b}}"
 headers:
   Content-Type: application/json
 body:
@@ -24,4 +28,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4503599417292890
+order: 4503560000000000
