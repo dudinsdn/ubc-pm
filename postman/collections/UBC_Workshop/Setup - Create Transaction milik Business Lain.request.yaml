@@ -1,6 +1,10 @@
 $kind: http-request
 url: "{{base_url}}/businesses/{{other_business_id}}/transactions"
 method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_other_tenant}}"
 headers:
   Content-Type: application/json
 body:

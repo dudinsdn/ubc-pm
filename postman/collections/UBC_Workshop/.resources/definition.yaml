@@ -12,6 +12,7 @@ auth:
 variables:
   base_url: http://localhost:3000
   token: ""
+  token_other_tenant: ""
   auth_email: ""
   auth_user_id: ""
   err_version: "999"
