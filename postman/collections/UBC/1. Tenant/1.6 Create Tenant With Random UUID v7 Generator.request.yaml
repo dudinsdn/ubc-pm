@@ -18,7 +18,7 @@ scripts:
       pm.test('Tenant created successfully', () => {
           pm.expect(pm.response.code).to.equal(201);
       });
-      pm.collectionVariables.set('tenant_id', body.id);
+      pm.expect(body.id).to.equal(pm.collectionVariables.get('tenant_uuid7_generator'));
       pm.collectionVariables.set('tenant_version_gen', body.version);
     language: text/javascript
   - type: beforeRequest
