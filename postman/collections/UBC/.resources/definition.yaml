@@ -1,8 +1,19 @@
 $kind: collection
 name: UBC
-description: ""
+description: |-
+  Core API Universal Business Core.
+
+  Collection membuat Tenant dan Owner pertama, login, lalu menyimpan JWT ke
+  variable `token` secara otomatis sebelum menjalankan endpoint terproteksi.
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 variables:
   base_url: http://localhost:3000
+  token: ""
+  auth_email: ""
+  auth_user_id: ""
   err_version: "999"
   tenant_id: ""
   tenant_version: ""

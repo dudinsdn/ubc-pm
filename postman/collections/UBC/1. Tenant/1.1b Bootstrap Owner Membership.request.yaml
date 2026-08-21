@@ -1,0 +1,28 @@
+$kind: http-request
+name: 1.1b Bootstrap Owner Membership
+url: "{{base_url}}/users/{{auth_user_id}}/memberships/bootstrap-owner"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tenant_id": "{{tenant_id}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('First Owner membership created successfully', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('auth_user_id'));
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_id'));
+          pm.expect(body.role).to.equal('owner');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 1200
