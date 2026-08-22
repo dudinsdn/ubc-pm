@@ -1,4 +1,0 @@
-$kind: folder
-name: 43 Workshop Integration Coverage
-description: Workshop Service Order transitions, validation, isolation, and cleanup.
-order: 43000

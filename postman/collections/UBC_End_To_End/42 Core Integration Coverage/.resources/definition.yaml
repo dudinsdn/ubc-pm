@@ -1,4 +1,0 @@
-$kind: folder
-name: 42 Core Integration Coverage
-description: Core API positive flow, validations, conflicts, sync, idempotency, and cleanup.
-order: 42000

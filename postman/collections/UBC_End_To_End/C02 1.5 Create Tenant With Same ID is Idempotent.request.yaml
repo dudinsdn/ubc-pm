@@ -1,0 +1,28 @@
+$kind: http-request
+name: 1.5 Create Tenant With Same ID is Idempotent
+url: "{{base_url}}/tenants"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "id": "{{tenant_id}}",
+        "name": "Tenant A Idempotent"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant created successfully', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('tenant_id', body.id);
+      pm.collectionVariables.set('tenant_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2600

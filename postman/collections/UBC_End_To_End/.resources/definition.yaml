@@ -18,7 +18,6 @@ auth:
 variables:
   base_url: http://localhost:3000
   token: ""
-  token_uuid7_tenant: ""
   token_other_tenant: ""
   token_b: ""
   token_c: ""
@@ -32,27 +31,27 @@ variables:
   customer_version: ""
   customer_id: ""
   customer_b_id: ""
+  customer_b_version: ""
   service_order_version: ""
   service_order_id: ""
-  transaction_id: ""
   service_order_cancel_id: ""
   service_order_cancel_version: ""
-  service_order_err_version: ""
   service_order_err_id: ""
+  service_order_err_version: ""
+  transaction_id: ""
+  transaction_version: ""
+  interaction_version: ""
+  interaction_id: ""
+  relationship_version: ""
+  relationship_id: ""
+  offline_sync_cursor: ""
+  offline_transaction_id: ""
+  offline_occurred_at: ""
   other_tenant_id: ""
   other_owner_email: ""
   other_owner_user_id: ""
   other_business_id: ""
   other_transaction_id: ""
-  interaction_version: ""
-  interaction_id: ""
-  relationship_version: ""
-  relationship_id: ""
-  transaction_version: ""
-  offline_sync_cursor: ""
-  offline_transaction_id: ""
-  offline_occurred_at: ""
-  uuid7_owner_email: ""
   admin_email: ""
   admin_user_id: ""
   admin_b_email: ""
@@ -62,10 +61,6 @@ variables:
   email: ""
   user_id: ""
   user_version: ""
-  email_idemp_a: ""
-  email_idemp_b: ""
-  user_idemp_b_id: ""
-  user_idem_b_version: ""
   tenant_a_id: ""
   tenant_b_id: ""
   tenant_c_id: ""
@@ -75,18 +70,13 @@ variables:
   membership_b_version: ""
   membership_demo_id: ""
   membership_demo_version: ""
-  ramdom_uuid_404: ""
   random_uuid_404: ""
-  customer_b_version: ""
   uuid_404: ""
-  tenant_uuid7_generator: ""
-  tenant_version_gen: ""
 scripts:
   - type: http:beforeRequest
     code: |-
       pm.collectionVariables.set('uuid_404', uuidv7());
       pm.collectionVariables.set('random_uuid_404', uuidv7());
-      pm.collectionVariables.set('ramdom_uuid_404', uuidv7());
 
       function uuidv7() {
           const timestamp = Date.now();
