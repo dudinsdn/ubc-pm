@@ -18,6 +18,7 @@ scripts:
       const body = pm.response.json();
       pm.test('Owner B login dengan scope Tenant B', () => {
           pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('owner_b_user_id'));
           pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_b_id'));
           pm.expect(body.role).to.equal('owner');
       });

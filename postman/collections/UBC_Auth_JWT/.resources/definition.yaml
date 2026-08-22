@@ -1,6 +1,9 @@
 $kind: collection
 name: UBC_Auth_JWT
-description: ""
+description: |-
+  Auth API dengan JWT Tenant-scoped. Onboarding publik menggunakan
+  POST /register sebagai satu-satunya jalur pembuatan Tenant + User + Owner;
+  request berikutnya memakai token hasil login sesuai Tenant.
 variables:
   base_url: http://localhost:3000
   tenant_id: ""

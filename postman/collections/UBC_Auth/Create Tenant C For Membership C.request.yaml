@@ -1,22 +1,32 @@
 $kind: http-request
-url: "{{base_url}}/tenants"
+name: Register Tenant C + Admin C
+url: "{{base_url}}/register"
 method: POST
+auth:
+  type: noauth
 headers:
   Content-Type: application/json
 body:
   type: json
   content: |-
     {
-        "name": "Tenant C for Membership C Revoke"
+        "tenant_name": "Tenant C for Membership C Revoke",
+        "email": "{{admin_c_email}}",
+        "password": "password123",
+        "full_name": "Admin Tenant C"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Tenant B created successfully', () => {
+      pm.test('Tenant C and Admin C registered successfully', () => {
           pm.expect(pm.response.code).to.equal(201);
       });
-      pm.collectionVariables.set('tenant_c_id', body.id);
+      pm.collectionVariables.set('tenant_c_id', body.tenant.id);
+      pm.collectionVariables.set('admin_c_user_id', body.user.id);
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set('admin_c_email', `admin_c_${Math.random().toString(36).substring(2, 10)}@ubc.xyz`);
     language: text/javascript
 settings:
   followRedirects: true

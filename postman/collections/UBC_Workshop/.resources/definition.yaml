@@ -3,8 +3,9 @@ name: UBC_Workshop
 description: |-
   Workshop capability API.
 
-  Collection membuat Tenant dan Owner pertama, login, lalu menyimpan JWT ke
-  variable `token` secara otomatis sebelum menjalankan endpoint terproteksi.
+  Collection melakukan onboarding publik lewat POST /register untuk membuat
+  Tenant + User + Owner sekaligus, login, lalu menyimpan JWT ke variable
+  `token` sebelum menjalankan endpoint terproteksi.
 auth:
   type: bearer
   credentials:
@@ -31,6 +32,8 @@ variables:
   service_order_err_version: ""
   service_order_err_id: ""
   other_tenant_id: ""
+  other_owner_email: ""
+  other_owner_user_id: ""
   other_business_id: ""
   other_transaction_id: ""
   interaction_version: ""

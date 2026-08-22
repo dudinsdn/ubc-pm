@@ -9,7 +9,7 @@ body:
   content: |-
     {
       "tenant_id": "{{tenant_uuid7_generator}}",
-      "email": "{{auth_email}}",
+      "email": "{{uuid7_owner_email}}",
       "password": "password123"
     }
 scripts:

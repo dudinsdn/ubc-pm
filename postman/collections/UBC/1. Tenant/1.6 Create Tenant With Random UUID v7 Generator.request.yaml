@@ -1,29 +1,35 @@
 $kind: http-request
-name: 1.6 Create Tenant With Random UUID v7 Generator
-url: "{{base_url}}/tenants"
+name: 1.6 Register Tenant UUIDv7 + Owner
+url: "{{base_url}}/register"
 method: POST
+auth:
+  type: noauth
 headers:
   Content-Type: application/json
 body:
   type: json
   content: |-
     {
-        "id": "{{tenant_uuid7_generator}}",
-        "name": "Tenant Gen Id from Client"
+        "tenant_id": "{{tenant_uuid7_generator}}",
+        "tenant_name": "Tenant Gen Id from Client",
+        "email": "{{uuid7_owner_email}}",
+        "password": "password123",
+        "full_name": "Owner Tenant UUID7"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Tenant created successfully', () => {
+      pm.test('Tenant UUIDv7 and its Owner registered successfully', () => {
           pm.expect(pm.response.code).to.equal(201);
       });
-      pm.expect(body.id).to.equal(pm.collectionVariables.get('tenant_uuid7_generator'));
-      pm.collectionVariables.set('tenant_version_gen', body.version);
+      pm.expect(body.tenant.id).to.equal(pm.collectionVariables.get('tenant_uuid7_generator'));
+      pm.collectionVariables.set('tenant_version_gen', body.tenant.version);
     language: text/javascript
   - type: beforeRequest
     code: |-
       pm.collectionVariables.set('tenant_uuid7_generator', uuidv7());
+      pm.collectionVariables.set('uuid7_owner_email', `uuid7_owner_${Math.random().toString(36).substring(2, 10)}@ubc.xyz`);
 
       function uuidv7() {
           const timestamp = Date.now();

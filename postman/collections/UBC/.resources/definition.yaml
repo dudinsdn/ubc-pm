@@ -3,8 +3,9 @@ name: UBC
 description: |-
   Core API Universal Business Core.
 
-  Collection membuat Tenant dan Owner pertama, login, lalu menyimpan JWT ke
-  variable `token` secara otomatis sebelum menjalankan endpoint terproteksi.
+  Collection melakukan onboarding publik lewat POST /register untuk membuat
+  Tenant + User + Owner sekaligus, login, lalu menyimpan JWT ke variable
+  `token` sebelum menjalankan endpoint terproteksi.
 auth:
   type: bearer
   credentials:
@@ -42,6 +43,7 @@ variables:
   uuid_404: ""
   tenant_uuid7_generator: ""
   tenant_version_gen: ""
+  uuid7_owner_email: ""
 scripts:
   - type: http:beforeRequest
     code: |-
