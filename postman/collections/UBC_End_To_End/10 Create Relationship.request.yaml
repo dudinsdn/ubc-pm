@@ -1,0 +1,29 @@
+$kind: http-request
+name: 10 Create Relationship
+url: "{{base_url}}/businesses/{{business_id}}/relationships"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "from_customer_id": "{{customer_id}}",
+      "to_customer_id": "{{customer_b_id}}",
+      "relationship_type": "sibling"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Relationship -> 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('relationship_id', body.id);
+      pm.collectionVariables.set('relationship_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 10000

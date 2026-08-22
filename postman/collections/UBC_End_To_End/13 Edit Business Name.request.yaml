@@ -1,0 +1,27 @@
+$kind: http-request
+name: 13 Edit Business Name
+url: "{{base_url}}/businesses/{{business_id}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Bengkel UBC End-to-End Updated",
+      "expected_version": {{business_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Rename Business -> 200 OK', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('business_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 13000

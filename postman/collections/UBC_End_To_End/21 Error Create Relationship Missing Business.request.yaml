@@ -1,0 +1,26 @@
+$kind: http-request
+name: 21 Error - Create Relationship with Missing Business -> 404
+url: "{{base_url}}/businesses/{{uuid_404}}/relationships"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "from_customer_id": "{{customer_id}}",
+      "to_customer_id": "{{customer_b_id}}",
+      "relationship_type": "sibling"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('404 Not Found (business tidak ada)', () => {
+          pm.expect(pm.response.code).to.equal(404);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 21000

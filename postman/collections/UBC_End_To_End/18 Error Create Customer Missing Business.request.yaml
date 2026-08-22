@@ -1,0 +1,24 @@
+$kind: http-request
+name: 18 Error - Create Customer with Missing Business -> 404
+url: "{{base_url}}/businesses/{{uuid_404}}/customers"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Customer Hantu"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('404 Not Found (business tidak ada)', () => {
+          pm.expect(pm.response.code).to.equal(404);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 18000

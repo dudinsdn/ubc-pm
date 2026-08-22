@@ -1,0 +1,30 @@
+$kind: http-request
+name: 07 Create Transaction
+url: "{{base_url}}/businesses/{{business_id}}/transactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "kind": "sale",
+      "amount": 50000,
+      "occurred_at": "{{$isoTimestamp}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Transaction -> 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('transaction_id', body.id);
+      pm.collectionVariables.set('transaction_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 7000

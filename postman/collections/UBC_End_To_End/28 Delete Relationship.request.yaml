@@ -1,0 +1,24 @@
+$kind: http-request
+name: 28 Delete Relationship
+url: "{{base_url}}/relationships/{{relationship_id}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{relationship_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Delete Relationship -> 204 No Content', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 28000
