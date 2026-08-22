@@ -1,0 +1,75 @@
+$kind: http-request
+name: 1.6 Register Tenant UUIDv7 + Owner
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "tenant_id": "{{tenant_uuid7_generator}}",
+        "tenant_name": "Tenant Gen Id from Client",
+        "email": "{{uuid7_owner_email}}",
+        "password": "password123",
+        "full_name": "Owner Tenant UUID7"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant UUIDv7 and its Owner registered successfully', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.expect(body.tenant.id).to.equal(pm.collectionVariables.get('tenant_uuid7_generator'));
+      pm.collectionVariables.set('tenant_version_gen', body.tenant.version);
+    language: text/javascript
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set('tenant_uuid7_generator', uuidv7());
+      pm.collectionVariables.set('uuid7_owner_email', `uuid7_owner_${Math.random().toString(36).substring(2, 10)}@ubc.xyz`);
+
+      function uuidv7() {
+          const timestamp = Date.now();
+
+          const bytes = new Uint8Array(16);
+
+          // Random bytes menggunakan Math.random()
+          for (let i = 0; i < 16; i++) {
+              bytes[i] = Math.floor(Math.random() * 256);
+          }
+
+          // 48-bit Unix timestamp milliseconds
+          bytes[0] = Math.floor(timestamp / 2 ** 40) & 0xff;
+          bytes[1] = Math.floor(timestamp / 2 ** 32) & 0xff;
+          bytes[2] = Math.floor(timestamp / 2 ** 24) & 0xff;
+          bytes[3] = Math.floor(timestamp / 2 ** 16) & 0xff;
+          bytes[4] = Math.floor(timestamp / 2 ** 8) & 0xff;
+          bytes[5] = timestamp & 0xff;
+
+          // Version 7
+          bytes[6] = (bytes[6] & 0x0f) | 0x70;
+
+          // RFC 9562 variant
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+          const hex = Array.from(bytes)
+              .map(b => b.toString(16).padStart(2, '0'))
+              .join('');
+
+          return [
+              hex.slice(0, 8),
+              hex.slice(8, 12),
+              hex.slice(12, 16),
+              hex.slice(16, 20),
+              hex.slice(20, 32)
+          ].join('-');
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 3278367334955682

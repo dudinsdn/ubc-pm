@@ -1,0 +1,4 @@
+$kind: folder
+name: 44 Auth Integration Coverage
+description: Authentication, users, multi-tenant memberships, role changes, and revoke.
+order: 44000

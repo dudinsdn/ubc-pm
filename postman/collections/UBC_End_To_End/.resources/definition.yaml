@@ -7,6 +7,10 @@ description: |-
   Collection melakukan onboarding publik lewat POST /register untuk membuat
   Tenant + User + Owner sekaligus. JWT hasil login serta seluruh ID dan version
   disimpan sebagai collection variables untuk request berikutnya.
+
+  Fase offline mensimulasikan client-generated ID, replay antrean yang
+  idempotent, dan incremental pull berdasarkan cursor RFC 3339. Local database
+  dan sync queue tetap merupakan tanggung jawab client, bukan backend.
 auth:
   type: bearer
   credentials:
@@ -14,7 +18,10 @@ auth:
 variables:
   base_url: http://localhost:3000
   token: ""
+  token_uuid7_tenant: ""
   token_other_tenant: ""
+  token_b: ""
+  token_c: ""
   auth_email: ""
   auth_user_id: ""
   err_version: "999"
@@ -42,6 +49,34 @@ variables:
   relationship_version: ""
   relationship_id: ""
   transaction_version: ""
+  offline_sync_cursor: ""
+  offline_transaction_id: ""
+  offline_occurred_at: ""
+  uuid7_owner_email: ""
+  admin_email: ""
+  admin_user_id: ""
+  admin_b_email: ""
+  admin_b_user_id: ""
+  admin_c_email: ""
+  admin_c_user_id: ""
+  email: ""
+  user_id: ""
+  user_version: ""
+  email_idemp_a: ""
+  email_idemp_b: ""
+  user_idemp_b_id: ""
+  user_idem_b_version: ""
+  tenant_a_id: ""
+  tenant_b_id: ""
+  tenant_c_id: ""
+  membership_a_id: ""
+  membership_a_version: ""
+  membership_b_id: ""
+  membership_b_version: ""
+  membership_demo_id: ""
+  membership_demo_version: ""
+  ramdom_uuid_404: ""
+  random_uuid_404: ""
   customer_b_version: ""
   uuid_404: ""
   tenant_uuid7_generator: ""
@@ -50,6 +85,8 @@ scripts:
   - type: http:beforeRequest
     code: |-
       pm.collectionVariables.set('uuid_404', uuidv7());
+      pm.collectionVariables.set('random_uuid_404', uuidv7());
+      pm.collectionVariables.set('ramdom_uuid_404', uuidv7());
 
       function uuidv7() {
           const timestamp = Date.now();

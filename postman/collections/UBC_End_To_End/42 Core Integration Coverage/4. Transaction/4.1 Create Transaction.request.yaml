@@ -1,5 +1,4 @@
 $kind: http-request
-name: 07 Create Transaction
 url: "{{base_url}}/businesses/{{business_id}}/transactions"
 method: POST
 headers:
@@ -8,21 +7,12 @@ body:
   type: json
   content: |-
     {
-      "id": "{{offline_transaction_id}}",
       "customer_id": "{{customer_id}}",
       "kind": "sale",
       "amount": 50000,
-      "occurred_at": "{{offline_occurred_at}}"
+      "occurred_at": "2026-08-08T00:00:00Z"
     }
 scripts:
-  - type: beforeRequest
-    code: |-
-      pm.collectionVariables.set(
-        'offline_transaction_id',
-        pm.variables.replaceIn('{{$guid}}')
-      );
-      pm.collectionVariables.set('offline_occurred_at', new Date().toISOString());
-    language: text/javascript
   - type: afterResponse
     code: |-
       const body = pm.response.json();
@@ -36,4 +26,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 7000
+order: 1000

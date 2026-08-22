@@ -1,5 +1,4 @@
 $kind: http-request
-name: 05 Create Service Order
 url: "{{base_url}}/businesses/{{business_id}}/service-orders"
 method: POST
 headers:
@@ -12,13 +11,6 @@ body:
       "description": "Ganti oli dan servis rem"
     }
 scripts:
-  - type: beforeRequest
-    code: |-
-      pm.collectionVariables.set(
-        'offline_sync_cursor',
-        new Date(Date.now() - 1000).toISOString()
-      );
-    language: text/javascript
   - type: afterResponse
     code: |-
       const body = pm.response.json();
@@ -32,4 +24,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 5000
+order: 4500731294683527

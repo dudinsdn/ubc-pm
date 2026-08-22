@@ -1,0 +1,36 @@
+$kind: http-request
+name: Register Workshop Tenant + Owner
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "tenant_name": "Tenant Workshop",
+        "email": "{{auth_email}}",
+        "password": "password123",
+        "full_name": "Workshop Collection Owner"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Workshop Tenant and Owner registered successfully', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('tenant_id', body.tenant.id);
+      pm.collectionVariables.set('tenant_version', body.tenant.version);
+      pm.collectionVariables.set('auth_user_id', body.user.id);
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set('auth_email', `workshop_owner_${Math.random().toString(36).substring(2, 10)}@ubc.xyz`);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4191820186649059

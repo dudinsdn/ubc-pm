@@ -1,0 +1,30 @@
+$kind: http-request
+url: "{{base_url}}/memberships/{{membership_b_id}}/role"
+method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_b}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "role": "owner",
+      "expected_version": {{membership_b_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Role berhasil diubah jadi owner', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('membership_b_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4503590000000000

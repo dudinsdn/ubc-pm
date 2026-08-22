@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{base_url}}/tenants/{{tenant_uuid7_generator}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_uuid7_tenant}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{tenant_version_gen}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Delete Tenant UUID7 Generator-> 204 No Content', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2486181149282239
