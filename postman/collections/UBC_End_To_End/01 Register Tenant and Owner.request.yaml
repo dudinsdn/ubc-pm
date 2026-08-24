@@ -21,6 +21,7 @@ scripts:
       const body = pm.response.json();
       pm.test('Workshop Tenant and Owner registered successfully', () => {
           pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.tenant.status).to.equal('pending');
       });
       pm.collectionVariables.set('tenant_id', body.tenant.id);
       pm.collectionVariables.set('tenant_version', body.tenant.version);

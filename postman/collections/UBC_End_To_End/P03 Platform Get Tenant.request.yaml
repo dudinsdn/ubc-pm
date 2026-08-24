@@ -1,0 +1,26 @@
+$kind: http-request
+name: P03 Platform Get Tenant
+url: "{{base_url}}/platform/tenants/{{tenant_id}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_admin_token}}"
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform Admin mengambil Tenant target', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.id).to.equal(pm.collectionVariables.get('tenant_id'));
+          pm.expect(body.status).to.equal('pending');
+          pm.expect(body.version).to.equal(Number(pm.collectionVariables.get('tenant_version')));
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2030

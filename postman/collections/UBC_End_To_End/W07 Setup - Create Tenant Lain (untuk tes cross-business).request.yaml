@@ -19,7 +19,12 @@ scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
+      pm.test('Tenant lain dimulai sebagai pending', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.tenant.status).to.equal('pending');
+      });
       pm.collectionVariables.set('other_tenant_id', body.tenant.id);
+      pm.collectionVariables.set('other_tenant_version', body.tenant.version);
       pm.collectionVariables.set('other_owner_user_id', body.user.id);
   - type: beforeRequest
     code: |-

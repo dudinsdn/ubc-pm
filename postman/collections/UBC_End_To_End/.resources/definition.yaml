@@ -55,6 +55,7 @@ variables:
   offline_transaction_id: ""
   offline_occurred_at: ""
   other_tenant_id: ""
+  other_tenant_version: ""
   other_owner_email: ""
   other_owner_user_id: ""
   other_business_id: ""
