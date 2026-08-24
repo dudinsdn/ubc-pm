@@ -5,7 +5,7 @@ method: GET
 auth:
   type: bearer
   credentials:
-    token: "{{platform_admin_token}}"
+    token: "{{platform_access_token}}"
 headers:
   Accept: application/json
 scripts:

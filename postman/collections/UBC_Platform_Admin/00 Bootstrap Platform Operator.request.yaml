@@ -1,0 +1,30 @@
+$kind: http-request
+name: 00 Bootstrap Platform Operator
+url: "{{base_url}}/platform/bootstrap/operator"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_admin_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{platform_operator_email}}",
+      "password": "{{platform_operator_password}}",
+      "full_name": "UBC Postman Platform Operator"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform operator tersedia', () => {
+        pm.expect(pm.response.code).to.be.oneOf([201, 409]);
+        if (pm.response.code === 409) {
+          pm.expect(body.error_code).to.equal('platform_operator_already_bootstrapped');
+        }
+      });
+    language: text/javascript
+order: 100

@@ -5,7 +5,7 @@ method: PATCH
 auth:
   type: bearer
   credentials:
-    token: "{{platform_admin_token}}"
+    token: "{{platform_access_token}}"
 headers:
   Content-Type: application/json
 body:
@@ -30,4 +30,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 23465
+order: 23466

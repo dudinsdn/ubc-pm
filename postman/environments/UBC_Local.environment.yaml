@@ -7,3 +7,10 @@ values:
     value: ""
     type: secret
     enabled: true
+  - key: platform_operator_email
+    value: ""
+    enabled: true
+  - key: platform_operator_password
+    value: ""
+    type: secret
+    enabled: true

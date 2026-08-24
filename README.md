@@ -8,9 +8,16 @@ digunakan untuk pengujian API UBC.
 
 ## Environment lokal
 
-Pilih environment **UBC Local** di Postman, lalu isi **local value**
-`platform_admin_token` dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend.
-Jangan masukkan nilai token tersebut ke initial/shared value atau commit Git.
+Pilih environment **UBC Local** di Postman, lalu isi **local value**:
+
+- `platform_admin_token` dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend;
+- `platform_operator_email` dengan email operator lokal;
+- `platform_operator_password` dengan password operator lokal.
+
+Jangan masukkan nilai rahasia tersebut ke initial/shared value atau commit Git.
+Collection mencoba bootstrap operator secara idempoten, lalu login dan menyimpan
+JWT platform sebagai collection variable `platform_access_token`. Token
+bootstrap tidak digunakan untuk endpoint control plane lainnya.
 
 Setelah environment aktif, collection `UBC_End_To_End` dan
 `UBC_Platform_Admin` dapat dijalankan langsung dari Collection Runner tanpa
@@ -24,6 +31,7 @@ environment yang sesuai dan jalankan collection yang tersedia.
 Collection mengikuti kontrak API UBC dan digunakan untuk pengujian endpoint,
 response, assertion, serta flow antar resource.
 
-`UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk aktivasi Tenant agar
-flow tetap mandiri. `UBC_Platform_Admin` adalah collection terpisah yang fokus
-pada daftar, detail, aktivasi, suspend, dan reaktivasi Tenant.
+`UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk assignment
+subscription dan aktivasi Tenant agar flow tetap mandiri.
+`UBC_Platform_Admin` adalah collection terpisah yang fokus pada daftar,
+detail, subscription, aktivasi, suspend, dan reaktivasi Tenant.
