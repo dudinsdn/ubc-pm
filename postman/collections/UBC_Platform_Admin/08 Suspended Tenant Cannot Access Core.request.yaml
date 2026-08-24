@@ -1,0 +1,20 @@
+$kind: http-request
+name: 08 Suspended Tenant Cannot Access Core
+url: "{{base_url}}/tenants/{{platform_tenant_id}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_tenant_token}}"
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant suspended ditolak oleh activation gate', () => {
+        pm.expect(pm.response.code).to.equal(403);
+        pm.expect(body.error_code).to.equal('tenant_suspended');
+      });
+    language: text/javascript
+order: 8000

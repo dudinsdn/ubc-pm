@@ -1,0 +1,21 @@
+$kind: http-request
+name: 04 Get Tenant
+url: "{{base_url}}/platform/tenants/{{platform_tenant_id}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_admin_token}}"
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform Admin melihat detail Tenant', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body.id).to.equal(pm.collectionVariables.get('platform_tenant_id'));
+        pm.expect(body.status).to.equal('pending');
+      });
+    language: text/javascript
+order: 4000

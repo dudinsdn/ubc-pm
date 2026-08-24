@@ -1,0 +1,16 @@
+$kind: collection
+name: UBC Platform Admin
+description: |-
+  Collection khusus Platform Admin untuk melihat dan mengelola lifecycle Tenant.
+
+  Pilih environment `UBC Local` dan isi local value `platform_admin_token`
+  dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend. Token tidak disimpan di
+  collection dan tidak perlu diteruskan melalui terminal.
+auth:
+  type: noauth
+variables:
+  platform_tenant_id: ""
+  platform_tenant_version: ""
+  platform_owner_email: ""
+  platform_owner_user_id: ""
+  platform_tenant_token: ""

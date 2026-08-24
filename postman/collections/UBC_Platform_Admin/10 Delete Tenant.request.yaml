@@ -1,0 +1,24 @@
+$kind: http-request
+name: 10 Delete Tenant
+url: "{{base_url}}/tenants/{{platform_tenant_id}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_tenant_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{platform_tenant_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Owner menghapus Tenant yang tidak memiliki Business', () => {
+        pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+order: 10000

@@ -1,0 +1,9 @@
+name: UBC Local
+values:
+  - key: base_url
+    value: http://localhost:3000
+    enabled: true
+  - key: platform_admin_token
+    value: ""
+    type: secret
+    enabled: true

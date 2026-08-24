@@ -1,0 +1,37 @@
+$kind: http-request
+name: 01 Register Pending Tenant
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tenant_name": "UBC Platform Admin Tenant",
+      "email": "{{platform_owner_email}}",
+      "password": "password123",
+      "full_name": "Platform Admin Test Owner"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set(
+        'platform_owner_email',
+        `platform_owner_${Math.random().toString(36).substring(2, 10)}@ubc.xyz`
+      );
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant baru berstatus pending', () => {
+        pm.expect(pm.response.code).to.equal(201);
+        pm.expect(body.tenant.status).to.equal('pending');
+      });
+      pm.collectionVariables.set('platform_tenant_id', body.tenant.id);
+      pm.collectionVariables.set('platform_tenant_version', body.tenant.version);
+      pm.collectionVariables.set('platform_owner_user_id', body.user.id);
+    language: text/javascript
+order: 1000
