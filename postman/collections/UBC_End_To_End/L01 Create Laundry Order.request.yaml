@@ -1,0 +1,57 @@
+$kind: http-request
+name: L01 Create Laundry Order
+url: "{{base_url}}/businesses/{{laundry_business_id}}/laundry-orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "{{laundry_order_id}}",
+      "customer_id": "{{laundry_customer_id}}",
+      "receipt_number": "{{laundry_receipt_number}}",
+      "lines": [
+        {
+          "service_code": "wash_fold",
+          "pricing_unit": "kilogram",
+          "quantity_milli_units": 2500,
+          "unit_price": 10000
+        },
+        {
+          "service_code": "dry_clean",
+          "pricing_unit": "piece",
+          "quantity_milli_units": 2000,
+          "unit_price": 7500
+        }
+      ],
+      "note": "Laundry order dari UBC_End_To_End"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      const orderId = pm.variables.replaceIn('{{$guid}}');
+      pm.collectionVariables.set('laundry_order_id', orderId);
+      pm.collectionVariables.set('laundry_receipt_number', `E2E-${orderId}`);
+      pm.collectionVariables.set('laundry_sync_cursor', new Date(Date.now() - 1000).toISOString());
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Laundry Order -> 201 with derived total', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.id).to.equal(pm.collectionVariables.get('laundry_order_id'));
+          pm.expect(body.business_id).to.equal(pm.collectionVariables.get('laundry_business_id'));
+          pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('laundry_customer_id'));
+          pm.expect(body.status).to.equal('received');
+          pm.expect(body.total).to.equal(40000);
+      });
+      if (pm.response.code === 201) {
+          pm.collectionVariables.set('laundry_order_version', body.version);
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23010

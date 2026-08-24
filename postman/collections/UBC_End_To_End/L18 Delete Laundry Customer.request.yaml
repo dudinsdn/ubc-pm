@@ -1,0 +1,24 @@
+$kind: http-request
+name: L18 Delete Laundry Customer
+url: "{{base_url}}/customers/{{laundry_customer_id}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{laundry_customer_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Delete Laundry Customer -> 204', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33930

@@ -1,0 +1,45 @@
+$kind: http-request
+name: L11 Create Laundry Order For Cancel Demo
+url: "{{base_url}}/businesses/{{laundry_business_id}}/laundry-orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "{{laundry_cancel_order_id}}",
+      "customer_id": "{{laundry_customer_id}}",
+      "receipt_number": "{{laundry_cancel_receipt_number}}",
+      "lines": [
+        {
+          "service_code": "express_wash",
+          "pricing_unit": "kilogram",
+          "quantity_milli_units": 1000,
+          "unit_price": 15000
+        }
+      ]
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      const orderId = pm.variables.replaceIn('{{$guid}}');
+      pm.collectionVariables.set('laundry_cancel_order_id', orderId);
+      pm.collectionVariables.set('laundry_cancel_receipt_number', `CANCEL-${orderId}`);
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Laundry cancel demo -> 201', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.status).to.equal('received');
+      });
+      if (pm.response.code === 201) {
+          pm.collectionVariables.set('laundry_cancel_order_version', body.version);
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23110

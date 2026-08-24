@@ -1,0 +1,31 @@
+$kind: http-request
+name: L00B Create Laundry Customer
+url: "{{base_url}}/businesses/{{laundry_business_id}}/customers"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Laundry E2E Customer",
+      "phone": "+6281234567890"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Laundry Customer -> 201', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.business_id).to.equal(pm.collectionVariables.get('laundry_business_id'));
+      });
+      if (pm.response.code === 201) {
+          pm.collectionVariables.set('laundry_customer_id', body.id);
+          pm.collectionVariables.set('laundry_customer_version', body.version);
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23002

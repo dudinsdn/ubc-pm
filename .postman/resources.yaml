@@ -6,5 +6,6 @@ cloudResources:
     ../postman/collections/UBC_Workshop: 19505039-d7949548-89b5-45f6-8c27-0e92a3ab3bbf
     ../postman/collections/UBC_Auth: 19505039-817aaa21-ef43-4849-83de-0e85a1821bab
     ../postman/collections/UBC_Auth_JWT: 19505039-e0ca1b2e-1bf7-4adc-a87f-a6740bafcfe6
+    ../postman/collections/UBC_End_To_End: 19505039-85d3c29a-ea12-41d3-abc2-3f8f515f2e0d
   environments: {}
   globals: {}

@@ -1,0 +1,29 @@
+$kind: http-request
+name: L09 Mark Laundry Order Ready For Pickup
+url: "{{base_url}}/laundry-orders/{{laundry_order_id}}/ready-for-pickup"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{laundry_order_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Laundry Order -> ready_for_pickup', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.status).to.equal('ready_for_pickup');
+      });
+      if (pm.response.code === 200) {
+          pm.collectionVariables.set('laundry_order_version', body.version);
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23090

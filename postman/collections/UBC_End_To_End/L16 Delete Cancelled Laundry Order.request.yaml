@@ -1,0 +1,24 @@
+$kind: http-request
+name: L16 Delete Cancelled Laundry Order
+url: "{{base_url}}/laundry-orders/{{laundry_cancel_order_id}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{laundry_cancel_order_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Delete cancelled Laundry Order -> 204', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33910

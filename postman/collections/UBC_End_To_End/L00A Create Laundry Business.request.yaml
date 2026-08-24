@@ -1,0 +1,31 @@
+$kind: http-request
+name: L00A Create Laundry Business
+url: "{{base_url}}/tenants/{{tenant_id}}/businesses"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Laundry UBC End-to-End",
+      "business_type": "laundry"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create Laundry Business -> 201', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.business_type).to.equal('laundry');
+      });
+      if (pm.response.code === 201) {
+          pm.collectionVariables.set('laundry_business_id', body.id);
+          pm.collectionVariables.set('laundry_business_version', body.version);
+      }
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23001
