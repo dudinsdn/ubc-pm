@@ -1,0 +1,25 @@
+$kind: http-request
+name: CP09 List Portal Transactions
+url: "{{base_url}}/customer-portal/profiles/{{customer_id}}/transactions"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{portal_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Portal membaca transaksi Customer tertaut', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body).to.be.an('array').with.lengthOf(1);
+          pm.expect(body[0].id).to.equal(pm.collectionVariables.get('transaction_id'));
+          pm.expect(body[0].customer_id).to.equal(pm.collectionVariables.get('customer_id'));
+          pm.expect(body[0].amount).to.equal(50000);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33355

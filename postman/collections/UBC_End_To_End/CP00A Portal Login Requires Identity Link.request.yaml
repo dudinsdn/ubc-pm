@@ -1,0 +1,29 @@
+$kind: http-request
+name: CP00A Portal Login Requires Identity Link
+url: "{{base_url}}/customer-portal/auth/login"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{auth_email}}",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Kredensial valid belum cukup tanpa identity link', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('invalid_credentials');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33322

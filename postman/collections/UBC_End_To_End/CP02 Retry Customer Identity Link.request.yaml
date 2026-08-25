@@ -1,0 +1,29 @@
+$kind: http-request
+name: CP02 Retry Customer Identity Link
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-identity"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "{{portal_identity_link_id}}",
+      "user_id": "{{auth_user_id}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Retry identity link bersifat idempotent', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.id).to.equal(pm.collectionVariables.get('portal_identity_link_id'));
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('auth_user_id'));
+          pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('customer_id'));
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33324

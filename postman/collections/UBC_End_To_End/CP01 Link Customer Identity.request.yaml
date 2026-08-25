@@ -1,0 +1,36 @@
+$kind: http-request
+name: CP01 Link Customer Identity
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-identity"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "{{portal_identity_link_id}}",
+      "user_id": "{{auth_user_id}}"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set(
+        'portal_identity_link_id',
+        pm.variables.replaceIn('{{$guid}}')
+      );
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner menautkan User ke Customer', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.id).to.equal(pm.collectionVariables.get('portal_identity_link_id'));
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('auth_user_id'));
+          pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('customer_id'));
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33323

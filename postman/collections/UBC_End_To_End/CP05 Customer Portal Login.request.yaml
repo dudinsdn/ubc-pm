@@ -1,0 +1,32 @@
+$kind: http-request
+name: CP05 Customer Portal Login
+url: "{{base_url}}/customer-portal/auth/login"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{auth_email}}",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('User tertaut memperoleh token Customer Portal', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('auth_user_id'));
+          pm.expect(body.token).to.be.a('string').and.not.empty;
+          pm.expect(body.expires_at).to.be.a('string').and.not.empty;
+      });
+      pm.collectionVariables.set('portal_access_token', body.token);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33351

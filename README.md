@@ -32,6 +32,9 @@ Collection mengikuti kontrak API UBC dan digunakan untuk pengujian endpoint,
 response, assertion, serta flow antar resource.
 
 `UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk assignment
-subscription dan aktivasi Tenant agar flow tetap mandiri.
+subscription dan aktivasi Tenant agar flow tetap mandiri. Collection ini juga
+mencakup Customer Portal tahap 1: identity linking, login dengan JWT portal
+terpisah, daftar profil tertaut, riwayat transaksi read-only, pemisahan token,
+isolasi lintas Tenant, idempotency/conflict, dan penyembunyian data soft-delete.
 `UBC_Platform_Admin` adalah collection terpisah yang fokus pada daftar,
 detail, subscription, aktivasi, suspend, dan reaktivasi Tenant.
