@@ -1,6 +1,6 @@
 $kind: http-request
-name: CP05 Customer Portal Login
-url: "{{base_url}}/customer-portal/auth/login"
+name: CPI05 Claim Invitation As New User
+url: "{{base_url}}/customer-portal/invitations/claim"
 method: POST
 auth:
   type: noauth
@@ -10,23 +10,23 @@ body:
   type: json
   content: |-
     {
-      "email": "{{auth_email}}",
-      "password": "password123"
+      "token": "{{portal_invitation_claim_token}}",
+      "password": "password123",
+      "full_name": "Invited Customer"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('User tertaut memperoleh token Customer Portal', () => {
+      pm.test('Claim atomik membuat User, link, dan JWT portal', () => {
           pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body.user_id).to.equal(pm.collectionVariables.get('auth_user_id'));
+          pm.expect(body.user_id).to.be.a('string').and.not.empty;
           pm.expect(body.token).to.be.a('string').and.not.empty;
-          pm.expect(body.expires_at).to.be.a('string').and.not.empty;
       });
-      pm.collectionVariables.set('portal_access_token', body.token);
+      pm.collectionVariables.set('invited_portal_access_token', body.token);
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 33361
+order: 33333

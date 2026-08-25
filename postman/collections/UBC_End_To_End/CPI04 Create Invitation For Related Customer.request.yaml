@@ -1,0 +1,35 @@
+$kind: http-request
+name: CPI04 Create Invitation For Related Customer
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_b_id}}/portal-invitations"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{portal_invitee_email}}"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set(
+        'portal_invitee_email',
+        `portal-${pm.variables.replaceIn('{{$guid}}')}@example.com`
+      );
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner mengundang Customer yang belum memiliki User', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('customer_b_id'));
+          pm.expect(body.email).to.equal(pm.collectionVariables.get('portal_invitee_email'));
+      });
+      pm.collectionVariables.set('portal_invitation_claim_token', body.claim_token);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33332

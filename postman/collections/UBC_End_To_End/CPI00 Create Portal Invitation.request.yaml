@@ -1,0 +1,31 @@
+$kind: http-request
+name: CPI00 Create Portal Invitation
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-invitations"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "revoked-invite-{{$guid}}@example.com"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner membuat invitation Customer Portal', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('customer_id'));
+          pm.expect(body.status).to.equal('pending');
+          pm.expect(body.claim_token).to.be.a('string').and.not.empty;
+      });
+      pm.collectionVariables.set('portal_invitation_id', body.id);
+      pm.collectionVariables.set('portal_invitation_version', body.version);
+      pm.collectionVariables.set('portal_revoked_claim_token', body.claim_token);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33321

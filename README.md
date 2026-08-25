@@ -33,8 +33,10 @@ response, assertion, serta flow antar resource.
 
 `UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk assignment
 subscription dan aktivasi Tenant agar flow tetap mandiri. Collection ini juga
-mencakup Customer Portal tahap 1: identity linking, login dengan JWT portal
-terpisah, daftar profil tertaut, riwayat transaksi read-only, pemisahan token,
-isolasi lintas Tenant, idempotency/conflict, dan penyembunyian data soft-delete.
+mencakup Customer Portal tahap 1 dan onboarding 2A: identity linking,
+invitation/claim single-use, login dengan JWT portal terpisah, daftar profil
+tertaut, riwayat transaksi read-only, pemisahan token, isolasi lintas Tenant,
+idempotency/conflict, revoke/replay protection, dan penyembunyian data
+soft-delete.
 `UBC_Platform_Admin` adalah collection terpisah yang fokus pada daftar,
 detail, subscription, aktivasi, suspend, dan reaktivasi Tenant.

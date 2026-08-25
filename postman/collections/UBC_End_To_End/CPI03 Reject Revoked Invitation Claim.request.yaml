@@ -1,0 +1,30 @@
+$kind: http-request
+name: CPI03 Reject Revoked Invitation Claim
+url: "{{base_url}}/customer-portal/invitations/claim"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "token": "{{portal_revoked_claim_token}}",
+      "password": "password123",
+      "full_name": "Revoked Customer"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Invitation revoked tidak dapat diklaim', () => {
+          pm.expect(pm.response.code).to.equal(410);
+          pm.expect(body.error_code).to.equal('portal_invitation_revoked');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33324

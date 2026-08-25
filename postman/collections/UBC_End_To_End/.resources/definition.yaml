@@ -2,8 +2,8 @@ $kind: collection
 name: UBC End-to-End Business Flow
 description: |-
   Alur bisnis lengkap dan mandiri: register, login, Service Order,
-  Transaction, Relationship, Interaction, Laundry Order, dan Customer Portal
-  read-only.
+  Transaction, Relationship, Interaction, Laundry Order, Customer Portal
+  read-only, serta onboarding invitation/claim.
 
   Collection melakukan onboarding publik lewat POST /register untuk membuat
   Tenant + User + Owner sekaligus. JWT hasil login serta seluruh ID dan version
@@ -91,6 +91,14 @@ variables:
   laundry_cancel_order_version: ""
   portal_identity_link_id: ""
   portal_access_token: ""
+  portal_invitation_id: ""
+  portal_invitation_version: ""
+  portal_invitation_claim_token: ""
+  portal_revoked_claim_token: ""
+  portal_invitee_email: ""
+  invited_portal_access_token: ""
+  platform_access_token: ""
+  subscription_version: ""
 scripts:
   - type: http:beforeRequest
     code: |-

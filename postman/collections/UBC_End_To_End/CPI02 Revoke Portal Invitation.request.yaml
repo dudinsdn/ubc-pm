@@ -1,0 +1,28 @@
+$kind: http-request
+name: CPI02 Revoke Portal Invitation
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-invitations/{{portal_invitation_id}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{portal_invitation_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Owner mencabut invitation pending', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.status).to.equal('revoked');
+          pm.expect(body.claim_token).to.equal(null);
+      });
+      pm.collectionVariables.set('portal_invitation_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33323

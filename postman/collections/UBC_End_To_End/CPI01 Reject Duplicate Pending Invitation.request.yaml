@@ -1,6 +1,6 @@
 $kind: http-request
-name: CP03 Reject Different User For Linked Customer
-url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-identity"
+name: CPI01 Reject Duplicate Pending Invitation
+url: "{{base_url}}/businesses/{{business_id}}/customers/{{customer_id}}/portal-invitations"
 method: POST
 headers:
   Content-Type: application/json
@@ -8,19 +8,19 @@ body:
   type: json
   content: |-
     {
-      "user_id": "{{other_owner_user_id}}"
+      "email": "duplicate-invite-{{$guid}}@example.com"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Customer tidak dapat ditautkan ke User kedua', () => {
+      pm.test('Satu Customer hanya mempunyai satu invitation pending', () => {
           pm.expect(pm.response.code).to.equal(409);
-          pm.expect(body.error_code).to.equal('customer_already_linked');
+          pm.expect(body.error_code).to.equal('portal_invitation_already_pending');
       });
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 33330
+order: 33322

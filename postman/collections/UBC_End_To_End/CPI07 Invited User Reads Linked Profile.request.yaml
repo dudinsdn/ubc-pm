@@ -1,25 +1,23 @@
 $kind: http-request
-name: CP08 List Linked Portal Profiles
+name: CPI07 Invited User Reads Linked Profile
 url: "{{base_url}}/customer-portal/profiles"
 method: GET
 auth:
   type: bearer
   credentials:
-    token: "{{portal_access_token}}"
+    token: "{{invited_portal_access_token}}"
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Portal hanya mengembalikan profil Customer tertaut', () => {
+      pm.test('User hasil claim hanya membaca Customer yang diundang', () => {
           pm.expect(pm.response.code).to.equal(200);
           pm.expect(body).to.be.an('array').with.lengthOf(1);
-          pm.expect(body[0].customer_id).to.equal(pm.collectionVariables.get('customer_id'));
-          pm.expect(body[0].business_id).to.equal(pm.collectionVariables.get('business_id'));
-          pm.expect(body[0].name).to.equal('Budi Santoso Updated');
+          pm.expect(body[0].customer_id).to.equal(pm.collectionVariables.get('customer_b_id'));
       });
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 33364
+order: 33335
