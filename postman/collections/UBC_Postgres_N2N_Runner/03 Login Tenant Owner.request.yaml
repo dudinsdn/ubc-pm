@@ -1,0 +1,28 @@
+$kind: http-request
+name: 03 Login Tenant Owner
+url: "{{base_url}}/auth/login"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{owner_email}}",
+      "password": "password123",
+      "tenant_id": "{{tenant_id}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant Owner login berhasil', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body.token).to.be.a('string').and.not.empty;
+      });
+      pm.collectionVariables.set('tenant_access_token', body.token);
+    language: text/javascript
+order: 400
+

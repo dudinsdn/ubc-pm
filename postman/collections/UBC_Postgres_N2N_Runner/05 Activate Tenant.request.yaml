@@ -1,0 +1,29 @@
+$kind: http-request
+name: 05 Activate Tenant
+url: "{{base_url}}/platform/tenants/{{tenant_id}}/status"
+method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "active",
+      "expected_version": {{tenant_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant diaktifkan Platform', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body.status).to.equal('active');
+      });
+      pm.collectionVariables.set('tenant_version', body.version);
+    language: text/javascript
+order: 600
+

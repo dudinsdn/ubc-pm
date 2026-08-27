@@ -1,0 +1,36 @@
+$kind: collection
+name: UBC PostgreSQL N2N Runner
+description: |-
+  Runner ringkas lintas produk untuk API PostgreSQL aktual:
+  register Tenant/Owner, aktivasi melalui Platform, operasi Business,
+  invitation/claim, lalu pembacaan Customer Portal.
+
+  Gunakan environment UBC Local dan isi local value untuk
+  platform_admin_token, platform_operator_email, dan
+  platform_operator_password. Collection tidak menyimpan secret.
+auth:
+  type: bearer
+  credentials:
+    token: "{{tenant_access_token}}"
+variables:
+  tenant_access_token: ""
+  platform_access_token: ""
+  portal_access_token: ""
+  owner_email: ""
+  portal_email: ""
+  tenant_id: ""
+  tenant_version: ""
+  business_id: ""
+  customer_id: ""
+  transaction_id: ""
+  invitation_id: ""
+  invitation_claim_token: ""
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      if (!pm.collectionVariables.get('owner_email')) {
+        const suffix = Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+        pm.collectionVariables.set('owner_email', 'n2n_owner_' + suffix + '@example.com');
+        pm.collectionVariables.set('portal_email', 'n2n_customer_' + suffix + '@example.com');
+      }
+    language: text/javascript

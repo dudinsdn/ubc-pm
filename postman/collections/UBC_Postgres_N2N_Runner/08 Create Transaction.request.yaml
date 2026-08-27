@@ -1,0 +1,27 @@
+$kind: http-request
+name: 08 Create Transaction
+url: "{{base_url}}/businesses/{{business_id}}/transactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "kind": "sale",
+      "amount": 125000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Transaction dibuat dan tertaut ke Customer', () => {
+        pm.expect(pm.response.code).to.equal(201);
+        pm.expect(body.customer_id).to.equal(pm.collectionVariables.get('customer_id'));
+        pm.expect(body.amount).to.equal(125000);
+      });
+      pm.collectionVariables.set('transaction_id', body.id);
+    language: text/javascript
+order: 900
+

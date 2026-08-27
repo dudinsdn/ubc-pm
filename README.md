@@ -31,6 +31,12 @@ environment yang sesuai dan jalankan collection yang tersedia.
 Collection mengikuti kontrak API UBC dan digunakan untuk pengujian endpoint,
 response, assertion, serta flow antar resource.
 
+`UBC_Postgres_N2N_Runner` adalah collection baru yang ringkas untuk smoke
+test lintas produk pada composition root PostgreSQL: bootstrap/login Platform,
+register dan aktivasi Tenant, membuat Business/Customer/Transaction, kemudian
+invitation/claim dan pembacaan data melalui Customer Portal. Jalankan collection
+ini secara utuh dan berurutan dengan environment `UBC Local`.
+
 `UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk assignment
 subscription dan aktivasi Tenant agar flow tetap mandiri. Collection ini juga
 mencakup Customer Portal tahap 1 dan onboarding 2A: identity linking,

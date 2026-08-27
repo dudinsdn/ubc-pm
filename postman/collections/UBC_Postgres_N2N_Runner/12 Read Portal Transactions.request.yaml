@@ -1,0 +1,20 @@
+$kind: http-request
+name: 12 Read Portal Transactions
+url: "{{base_url}}/customer-portal/profiles/{{customer_id}}/transactions"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{portal_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Customer membaca transaksi sendiri', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body).to.be.an('array').with.lengthOf(1);
+        pm.expect(body[0].id).to.equal(pm.collectionVariables.get('transaction_id'));
+      });
+    language: text/javascript
+order: 1300
+

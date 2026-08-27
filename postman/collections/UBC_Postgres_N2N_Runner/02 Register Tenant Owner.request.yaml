@@ -1,0 +1,31 @@
+$kind: http-request
+name: 02 Register Tenant Owner
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tenant_name": "UBC PostgreSQL N2N Tenant",
+      "email": "{{owner_email}}",
+      "password": "password123",
+      "full_name": "UBC N2N Owner"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant dan Owner terdaftar', () => {
+        pm.expect(pm.response.code).to.equal(201);
+        pm.expect(body.tenant.status).to.equal('pending');
+        pm.expect(body.membership.role).to.equal('owner');
+      });
+      pm.collectionVariables.set('tenant_id', body.tenant.id);
+      pm.collectionVariables.set('tenant_version', body.tenant.version);
+    language: text/javascript
+order: 300
+
