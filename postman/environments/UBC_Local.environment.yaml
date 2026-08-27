@@ -1,16 +1,10 @@
 name: UBC Local
 values:
   - key: base_url
-    value: http://localhost:3000
-    enabled: true
+    value: 'http://localhost:3000'
   - key: platform_admin_token
-    value: ""
-    type: secret
-    enabled: true
+    value: 3URtuIVMVP/tgxLbDPjpbG6Vfa4+ByRL+zOgTP32hn4=
   - key: platform_operator_email
-    value: ""
-    enabled: true
+    value: operator@mail.xyz
   - key: platform_operator_password
-    value: ""
-    type: secret
-    enabled: true
+    value: password12345678
