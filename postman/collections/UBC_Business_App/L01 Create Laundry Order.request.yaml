@@ -33,7 +33,7 @@ scripts:
       const orderId = pm.variables.replaceIn('{{$guid}}');
       pm.collectionVariables.set('laundry_order_id', orderId);
       pm.collectionVariables.set('laundry_receipt_number', `E2E-${orderId}`);
-      pm.collectionVariables.set('laundry_sync_cursor', new Date(Date.now() - 1000).toISOString());
+      pm.collectionVariables.set('laundry_sync_cursor', '00000000000000000000000000000000000000000000000000000000');
     language: text/javascript
   - type: afterResponse
     code: |-

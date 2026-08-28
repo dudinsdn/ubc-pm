@@ -14,10 +14,7 @@ body:
 scripts:
   - type: beforeRequest
     code: |-
-      pm.collectionVariables.set(
-        'offline_sync_cursor',
-        new Date(Date.now() - 1000).toISOString()
-      );
+      pm.collectionVariables.set('offline_sync_cursor', '00000000000000000000000000000000000000000000000000000000');
     language: text/javascript
   - type: afterResponse
     code: |-

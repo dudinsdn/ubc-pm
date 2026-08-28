@@ -1,9 +1,9 @@
 $kind: http-request
 name: 20 Offline Incremental Sync Service Orders
-url: "{{base_url}}/businesses/{{business_id}}/service-orders?updated_since={{offline_sync_cursor}}"
+url: "{{base_url}}/businesses/{{business_id}}/service-orders?cursor={{offline_sync_cursor}}"
 method: GET
 queryParams:
-  - key: updated_since
+  - key: cursor
     value: "{{offline_sync_cursor}}"
     disabled: false
 scripts:
@@ -12,7 +12,7 @@ scripts:
       const body = pm.response.json();
       pm.test('Offline sync Service Orders -> 200 and includes changed resource', () => {
           pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body.some(item => item.id === pm.collectionVariables.get('service_order_id'))).to.be.true;
+          pm.expect(body.items.some(item => item.id === pm.collectionVariables.get('service_order_id'))).to.be.true;
       });
     language: text/javascript
 settings:

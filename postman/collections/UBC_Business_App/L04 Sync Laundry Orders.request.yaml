@@ -1,9 +1,9 @@
 $kind: http-request
 name: L04 Incremental Sync Laundry Orders
-url: "{{base_url}}/businesses/{{laundry_business_id}}/laundry-orders?updated_since={{laundry_sync_cursor}}"
+url: "{{base_url}}/businesses/{{laundry_business_id}}/laundry-orders?cursor={{laundry_sync_cursor}}"
 method: GET
 queryParams:
-  - key: updated_since
+  - key: cursor
     value: "{{laundry_sync_cursor}}"
     disabled: false
 scripts:
@@ -12,7 +12,7 @@ scripts:
       const body = pm.response.json();
       pm.test('Laundry incremental sync includes created order', () => {
           pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body.some(item => item.id === pm.collectionVariables.get('laundry_order_id'))).to.be.true;
+          pm.expect(body.items.some(item => item.id === pm.collectionVariables.get('laundry_order_id'))).to.be.true;
       });
     language: text/javascript
 settings:
