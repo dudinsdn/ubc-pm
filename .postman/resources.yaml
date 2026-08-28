@@ -2,10 +2,6 @@ workspace:
   id: 1eea872e-d45e-40b5-b105-f8bbec6a59c6
 cloudResources:
   collections:
-    ../postman/collections/UBC: 19505039-177408ac-83f1-48ae-9afa-5bff61b441a2
-    ../postman/collections/UBC_Workshop: 19505039-d7949548-89b5-45f6-8c27-0e92a3ab3bbf
-    ../postman/collections/UBC_Auth: 19505039-817aaa21-ef43-4849-83de-0e85a1821bab
-    ../postman/collections/UBC_Auth_JWT: 19505039-e0ca1b2e-1bf7-4adc-a87f-a6740bafcfe6
     ../postman/collections/UBC_Business_App: 19505039-85d3c29a-ea12-41d3-abc2-3f8f515f2e0d
     ../postman/collections/UBC_Platform_Admin: 19505039-4255c2a6-e9c6-4096-abaf-37863602f80b
     ../postman/collections/UBC_Customer_App: 19505039-9c2920d4-0a33-49a6-91d9-d95603fff7e9
