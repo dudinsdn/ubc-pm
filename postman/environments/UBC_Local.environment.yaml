@@ -8,3 +8,5 @@ values:
     value: operator@mail.xyz
   - key: platform_operator_password
     value: password12345678
+  - key: cors_allowed_origin
+    value: 'http://localhost:3000'

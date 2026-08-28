@@ -1,0 +1,25 @@
+$kind: http-request
+name: Security CORS Origin Tidak Diizinkan
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  Origin: "https://attacker.example"
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tenant_id": "{{tenant_a_id}}",
+      "email": "{{email}}",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Origin CORS tidak terdaftar ditolak', () => {
+          pm.expect(pm.response.code).to.equal(403);
+          pm.expect(body.error_code).to.equal('cors_origin_denied');
+      });
+    language: text/javascript
+order: 4503992000000000

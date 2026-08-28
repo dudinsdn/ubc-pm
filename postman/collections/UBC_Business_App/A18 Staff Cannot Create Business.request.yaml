@@ -1,0 +1,27 @@
+$kind: http-request
+name: Staff Tidak Dapat Membuat Business
+url: "{{base_url}}/tenants/{{tenant_b_id}}/businesses"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_staff_b}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Business Ditolak Staff",
+      "business_type": "retail"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Staff create Business ditolak', () => {
+          pm.expect(pm.response.code).to.equal(403);
+          pm.expect(body.error_code).to.equal('forbidden');
+      });
+    language: text/javascript
+order: 4503582000000000

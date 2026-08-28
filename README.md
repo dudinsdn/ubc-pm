@@ -53,3 +53,22 @@ linking, invitation create/revoke/claim, replay protection, portal login dengan
 JWT terpisah, isolasi token, daftar profil, dan transaksi read-only. Mutation
 Customer tetap dilakukan oleh Owner sebagai setup Business App; Customer App
 tidak memiliki endpoint mutation Customer.
+
+## Security hardening scenarios
+
+`UBC_Business_App` juga memuat skenario Tahap 5 untuk permission matrix,
+perlindungan Owner terakhir, dan revocation token:
+
+- `A10A Login Staff Tenant B` membuat token Staff yang terikat Membership.
+- `A17` dan `A18` memastikan Staff mendapat `403` untuk operasi struktural.
+- `A19` dan `A20` memastikan Owner terakhir tidak dapat didemote atau dicabut.
+- `A12A` memastikan token Staff lama ditolak `401 access_revoked` setelah role
+  berubah lewat `A12`.
+- `S02`, `S03`, dan `S04` memeriksa payload 1 MiB serta CORS.
+- `S01 Rate Limit Login` harus dijalankan sebagai request terisolasi dengan
+  Collection Runner sebanyak 21 iterasi; iterasi ke-21 harus menghasilkan
+  `429 rate_limit_exceeded` dan `Retry-After: 60`.
+
+Pastikan `CORS_ALLOWED_ORIGINS` backend memuat nilai `cors_allowed_origin`
+sebelum menjalankan `S04`. Skenario security yang memakai rate limit dijalankan
+terpisah dari flow utama agar window 60 detik tidak mengganggu request setup.
