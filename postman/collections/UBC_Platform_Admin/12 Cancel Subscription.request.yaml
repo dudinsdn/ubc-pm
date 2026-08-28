@@ -1,5 +1,5 @@
 $kind: http-request
-name: 09B Cancel Subscription
+name: 12 Cancel Subscription
 url: "{{base_url}}/platform/tenants/{{platform_tenant_id}}/subscription"
 method: DELETE
 auth:
@@ -25,4 +25,4 @@ scripts:
       });
       pm.collectionVariables.set('platform_subscription_version', body.version);
     language: text/javascript
-order: 9600
+order: 12000
