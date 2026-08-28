@@ -1,6 +1,6 @@
 $kind: http-request
-name: P07 Platform Reactivate Tenant
-url: "{{base_url}}/platform/tenants/{{tenant_id}}/status"
+name: W08A Platform Activate Tenant Lain
+url: "{{base_url}}/platform/tenants/{{other_tenant_id}}/status"
 method: PATCH
 auth:
   type: bearer
@@ -13,20 +13,21 @@ body:
   content: |-
     {
       "status": "active",
-      "expected_version": {{tenant_version}}
+      "expected_version": {{other_tenant_version}}
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Platform Admin mengaktifkan kembali Tenant', () => {
+      pm.test('Platform Admin mengaktifkan Tenant lain', () => {
           pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.id).to.equal(pm.collectionVariables.get('other_tenant_id'));
           pm.expect(body.status).to.equal('active');
       });
-      pm.collectionVariables.set('tenant_version', body.version);
+      pm.collectionVariables.set('other_tenant_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 33360
+order: 23466

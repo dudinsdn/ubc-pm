@@ -19,9 +19,17 @@ Collection mencoba bootstrap operator secara idempoten, lalu login dan menyimpan
 JWT platform sebagai collection variable `platform_access_token`. Token
 bootstrap tidak digunakan untuk endpoint control plane lainnya.
 
-Setelah environment aktif, collection `UBC_End_To_End` dan
-`UBC_Platform_Admin` dapat dijalankan langsung dari Collection Runner tanpa
-menambahkan parameter lewat terminal.
+Setelah environment aktif, tiga collection product boundary dapat dijalankan
+langsung dari Collection Runner tanpa menambahkan parameter lewat terminal:
+
+- `UBC_Business_App` untuk API Tenant, Auth/Membership, Core, Workshop,
+  Laundry, dan kontrak offline-first;
+- `UBC_Platform_Admin` untuk control plane online-first;
+- `UBC_Customer_App` untuk identity linking, invitation/claim, login portal,
+  dan data Customer read-only.
+
+Setiap collection menyiapkan dependency minimumnya sendiri. Request setup yang
+menyentuh boundary lain bukan coverage utama collection tersebut.
 
 ## Usage
 
@@ -31,18 +39,17 @@ environment yang sesuai dan jalankan collection yang tersedia.
 Collection mengikuti kontrak API UBC dan digunakan untuk pengujian endpoint,
 response, assertion, serta flow antar resource.
 
-`UBC_Postgres_N2N_Runner` adalah collection baru yang ringkas untuk smoke
-test lintas produk pada composition root PostgreSQL: bootstrap/login Platform,
-register dan aktivasi Tenant, membuat Business/Customer/Transaction, kemudian
-invitation/claim dan pembacaan data melalui Customer Portal. Jalankan collection
-ini secara utuh dan berurutan dengan environment `UBC Local`.
+`UBC_Business_App` menjalankan flow bisnis lengkap, termasuk Core, Auth,
+Workshop, Laundry, idempotency, optimistic concurrency, negative cases,
+incremental sync, dan cleanup berurutan. Bootstrap Platform, subscription, dan
+aktivasi Tenant hanya berfungsi sebagai setup agar collection mandiri.
 
-`UBC_End_To_End` menjalankan seluruh flow bisnis, termasuk assignment
-subscription dan aktivasi Tenant agar flow tetap mandiri. Collection ini juga
-mencakup Customer Portal tahap 1 dan onboarding 2A: identity linking,
-invitation/claim single-use, login dengan JWT portal terpisah, daftar profil
-tertaut, riwayat transaksi read-only, pemisahan token, isolasi lintas Tenant,
-idempotency/conflict, revoke/replay protection, dan penyembunyian data
-soft-delete.
-`UBC_Platform_Admin` adalah collection terpisah yang fokus pada daftar,
-detail, subscription, aktivasi, suspend, dan reaktivasi Tenant.
+`UBC_Platform_Admin` mencakup bootstrap/login operator, daftar dan detail
+Tenant, subscription plans, assignment/read/cancel subscription, lifecycle
+Tenant, audit events, serta pemeriksaan access gate dari sisi Business App.
+
+`UBC_Customer_App` mencakup setup Business/Customer/Transaction, direct identity
+linking, invitation create/revoke/claim, replay protection, portal login dengan
+JWT terpisah, isolasi token, daftar profil, dan transaksi read-only. Mutation
+Customer tetap dilakukan oleh Owner sebagai setup Business App; Customer App
+tidak memiliki endpoint mutation Customer.

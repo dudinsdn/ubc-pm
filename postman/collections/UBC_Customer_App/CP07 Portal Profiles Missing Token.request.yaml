@@ -10,7 +10,7 @@ scripts:
       const body = pm.response.json();
       pm.test('Profil portal membutuhkan token', () => {
           pm.expect(pm.response.code).to.equal(401);
-          pm.expect(body.error_code).to.equal('missing_token');
+          pm.expect(body.error_code).to.equal('portal_token_missing');
       });
     language: text/javascript
 settings:

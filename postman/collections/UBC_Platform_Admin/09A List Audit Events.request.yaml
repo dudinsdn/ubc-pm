@@ -1,0 +1,21 @@
+$kind: http-request
+name: 09A List Audit Events
+url: "{{base_url}}/platform/audit-events?limit=50"
+method: GET
+queryParams:
+  limit: "50"
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Audit trail merekam operasi control plane', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body).to.be.an('array').that.is.not.empty;
+        pm.expect(body.some((event) => event.resource_id === pm.collectionVariables.get('platform_tenant_id'))).to.equal(true);
+      });
+    language: text/javascript
+order: 9500

@@ -8,6 +8,7 @@ scripts:
       pm.test('Status code is 200', () => {
           pm.expect(pm.response.code).to.equal(200);
       });
+      pm.collectionVariables.set('user_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true

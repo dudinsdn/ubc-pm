@@ -1,22 +1,22 @@
 $kind: http-request
-name: CPI08 Deleted Invited Customer Hidden
+name: CP06 Tenant Token Rejected By Portal
 url: "{{base_url}}/customer-portal/profiles"
 method: GET
 auth:
   type: bearer
   credentials:
-    token: "{{invited_portal_access_token}}"
+    token: "{{token}}"
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Customer hasil invitation tersembunyi setelah soft-delete', () => {
-          pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body).to.be.an('array').that.is.empty;
+      pm.test('JWT Tenant tidak diterima perimeter Customer Portal', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('portal_token_invalid');
       });
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 38100
+order: 33362

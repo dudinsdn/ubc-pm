@@ -1,9 +1,9 @@
 $kind: collection
-name: UBC End-to-End Business Flow
+name: UBC Business App
 description: |-
   Alur bisnis lengkap dan mandiri: register, login, Service Order,
-  Transaction, Relationship, Interaction, Laundry Order, Customer Portal
-  read-only, serta onboarding invitation/claim.
+  Transaction, Relationship, Interaction, Laundry Order, Auth/Membership,
+  negative cases, offline retry/sync, dan cleanup berurutan.
 
   Collection melakukan onboarding publik lewat POST /register untuk membuat
   Tenant + User + Owner sekaligus. JWT hasil login serta seluruh ID dan version
@@ -12,6 +12,9 @@ description: |-
   Fase offline mensimulasikan client-generated ID, replay antrean yang
   idempotent, dan incremental pull berdasarkan cursor RFC 3339. Local database
   dan sync queue tetap merupakan tanggung jawab client, bukan backend.
+
+  Request Platform di awal hanya menyiapkan subscription dan aktivasi Tenant;
+  request tersebut bukan coverage control plane collection ini.
 auth:
   type: bearer
   credentials:

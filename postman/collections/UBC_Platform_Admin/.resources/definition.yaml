@@ -1,7 +1,8 @@
 $kind: collection
 name: UBC Platform Admin
 description: |-
-  Collection khusus Platform Admin untuk melihat dan mengelola lifecycle Tenant.
+  Collection khusus Platform Admin untuk operator authentication, Tenant
+  lifecycle, plans/subscriptions, entitlements, dan audit trail.
 
   Pilih environment `UBC Local` dan isi local value `platform_admin_token`
   dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend. Token tidak disimpan di
@@ -14,3 +15,5 @@ variables:
   platform_owner_email: ""
   platform_owner_user_id: ""
   platform_tenant_token: ""
+  platform_access_token: ""
+  platform_subscription_version: ""

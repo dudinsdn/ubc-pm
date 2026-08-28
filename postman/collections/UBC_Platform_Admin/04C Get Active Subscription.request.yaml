@@ -1,0 +1,20 @@
+$kind: http-request
+name: 04C Get Active Subscription
+url: "{{base_url}}/platform/tenants/{{platform_tenant_id}}/subscription"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription Tenant dapat dibaca', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('platform_tenant_id'));
+        pm.expect(body.status).to.equal('active');
+      });
+      pm.collectionVariables.set('platform_subscription_version', body.version);
+    language: text/javascript
+order: 4750

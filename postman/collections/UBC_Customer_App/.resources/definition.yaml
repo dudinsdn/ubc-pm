@@ -1,9 +1,10 @@
 $kind: collection
-name: UBC PostgreSQL N2N Runner
+name: UBC Customer App
 description: |-
-  Runner ringkas lintas produk untuk API PostgreSQL aktual:
-  register Tenant/Owner, aktivasi melalui Platform, operasi Business,
-  invitation/claim, lalu pembacaan Customer Portal.
+  Collection Customer App online-first: identity linking, invitation lifecycle,
+  claim single-use, portal login, token isolation, profil tertaut, dan transaksi
+  Customer read-only. Register, aktivasi Tenant, dan mutation Business/Customer
+  hanya menjadi setup fixture bagi boundary Customer App.
 
   Gunakan environment UBC Local dan isi local value untuk
   platform_admin_token, platform_operator_email, dan
@@ -25,6 +26,22 @@ variables:
   transaction_id: ""
   invitation_id: ""
   invitation_claim_token: ""
+  auth_user_id: ""
+  auth_email: ""
+  customer_b_id: ""
+  customer_b_version: ""
+  portal_identity_link_id: ""
+  portal_invitation_id: ""
+  portal_invitation_version: ""
+  portal_invitation_claim_token: ""
+  portal_revoked_claim_token: ""
+  portal_invitee_email: ""
+  invited_portal_access_token: ""
+  token_other_tenant: ""
+  other_tenant_id: ""
+  other_tenant_version: ""
+  other_owner_email: ""
+  other_owner_user_id: ""
 scripts:
   - type: http:beforeRequest
     code: |-

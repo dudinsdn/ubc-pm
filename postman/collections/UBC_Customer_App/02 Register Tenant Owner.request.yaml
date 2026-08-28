@@ -26,6 +26,7 @@ scripts:
       });
       pm.collectionVariables.set('tenant_id', body.tenant.id);
       pm.collectionVariables.set('tenant_version', body.tenant.version);
+      pm.collectionVariables.set('auth_user_id', body.user.id);
+      pm.collectionVariables.set('auth_email', pm.collectionVariables.get('owner_email'));
     language: text/javascript
 order: 300
-
