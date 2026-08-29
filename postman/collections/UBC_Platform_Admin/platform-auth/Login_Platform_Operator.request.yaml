@@ -10,17 +10,17 @@ body:
   type: json
   content: |-
     {
-      "email": "{{platform_operator_email}}",
-      "password": "{{platform_operator_password}}"
+    	"email": "{{platform_operator_email}}",
+    	"password": "{{platform_operator_password}}"
     }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
       pm.test('Platform operator login menghasilkan JWT', () => {
-        pm.expect(pm.response.code).to.equal(200);
-        pm.expect(body.role).to.equal('admin');
-        pm.expect(body.token).to.be.a('string').and.not.empty;
+      	pm.expect(pm.response.code).to.equal(200);
+      	pm.expect(body.role).to.equal('admin');
+      	pm.expect(body.token).to.be.a('string').and.not.empty;
       });
       pm.collectionVariables.set('platform_access_token', body.token);
     language: text/javascript

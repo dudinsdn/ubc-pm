@@ -7,13 +7,7 @@ description: |-
   Pilih environment `UBC Local` dan isi local value `platform_admin_token`
   dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend. Token tidak disimpan di
   collection dan tidak perlu diteruskan melalui terminal.
+variables:
+  platform_access_token: ""
 auth:
   type: noauth
-variables:
-  platform_tenant_id: ""
-  platform_tenant_version: ""
-  platform_owner_email: ""
-  platform_owner_user_id: ""
-  platform_tenant_token: ""
-  platform_access_token: ""
-  platform_subscription_version: ""

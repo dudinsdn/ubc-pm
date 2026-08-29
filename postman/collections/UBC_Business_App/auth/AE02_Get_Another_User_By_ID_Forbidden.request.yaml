@@ -1,7 +1,11 @@
 $kind: http-request
-name: Get Another User By ID Forbidden
-url: "{{base_url}}/users/{{random_uuid_404}}"
+name: AE02_Get_Another_User_By_ID_Forbidden
+url: "{{base_url}}/users/{{other_user_id}}"
 method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 scripts:
   - type: afterResponse
     code: |-
@@ -16,4 +20,4 @@ settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4412292529156102
+order: 8000

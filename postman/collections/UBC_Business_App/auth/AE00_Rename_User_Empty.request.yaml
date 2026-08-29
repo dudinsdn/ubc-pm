@@ -1,5 +1,5 @@
 $kind: http-request
-name: Rename User Empty
+name: AE00_Rename_User_Empty
 url: "{{base_url}}/users/{{user_id}}/rename"
 method: PATCH
 headers:
@@ -11,17 +11,21 @@ body:
       "full_name": " ",
       "expected_version": {{user_version}}
     }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
       pm.test('Empty full name error message', () => {
-          pm.expect(pm.response.code).to.equal(400);
+      	pm.expect(pm.response.code).to.equal(400);
+      	pm.collectionVariables.set('user_version', body.version);
       });
-      pm.collectionVariables.set('user_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4443972845107459
+order: 6000

@@ -1,4 +1,5 @@
 $kind: http-request
+name: A04_Rename_User
 url: "{{base_url}}/users/{{user_id}}/rename"
 method: PATCH
 headers:
@@ -7,20 +8,24 @@ body:
   type: json
   content: |-
     {
-      "full_name": "User A Edit",
+      "full_name": "Edit Owner Tenant A",
       "expected_version": {{user_version}}
     }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
       pm.test('User renamed successfully', () => {
-          pm.expect(pm.response.code).to.equal(200);
+      	pm.expect(pm.response.code).to.equal(200);
+      	pm.collectionVariables.set('user_version', body.version);
       });
-      pm.collectionVariables.set('user_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true
   disableUrlEncoding: false
   disableCookies: false
-order: 4441417933206526
+order: 4000

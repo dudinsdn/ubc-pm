@@ -7,6 +7,6 @@ values:
   - key: platform_operator_email
     value: operator@ubc.xyz
   - key: platform_operator_password
-    value: password12345678
+    value: pwd12345678
   - key: cors_allowed_origin
     value: 'http://127.0.0.1:3000'

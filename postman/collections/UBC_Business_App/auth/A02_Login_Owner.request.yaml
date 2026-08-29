@@ -1,5 +1,5 @@
 $kind: http-request
-name: Login Owner Tenant A
+name: A02_Login_Owner
 url: "{{base_url}}/auth/login"
 method: POST
 headers:
@@ -8,20 +8,27 @@ body:
   type: json
   content: |-
     {
-      "tenant_id": "{{tenant_a_id}}",
+      "tenant_id": "{{tenant_id}}",
       "email": "{{email}}",
-      "password": "password123"
+      "password": "{{pwd}}"
     }
+auth:
+  type: noauth
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Login Owner Tenant A berhasil', () => {
+      pm.test('Owner login returns Tenant-scoped JWT', () => {
           pm.expect(pm.response.code).to.equal(200);
           pm.expect(body.user_id).to.equal(pm.collectionVariables.get('user_id'));
-          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_a_id'));
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_id'));
           pm.expect(body.role).to.equal('owner');
+          pm.expect(body.token).to.be.a('string').and.not.empty;
+      	pm.collectionVariables.set('token', body.token);
       });
-      pm.collectionVariables.set('token', body.token);
     language: text/javascript
-order: 4370000000000000
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2000

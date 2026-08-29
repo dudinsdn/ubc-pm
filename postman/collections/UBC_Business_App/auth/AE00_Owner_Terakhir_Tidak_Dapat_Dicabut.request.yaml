@@ -1,6 +1,6 @@
 $kind: http-request
-name: Owner Terakhir Tidak Dapat Dicabut
-url: "{{base_url}}/memberships/{{membership_a_id}}"
+name: AE00_Owner_Terakhir_Tidak_Dapat_Dicabut
+url: "{{base_url}}/memberships/{{membership_id}}"
 method: DELETE
 auth:
   type: bearer
@@ -23,4 +23,4 @@ scripts:
           pm.expect(body.error_code).to.equal('last_owner_required');
       });
     language: text/javascript
-order: 4503584000000000
+order: 5000

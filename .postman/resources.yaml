@@ -5,10 +5,10 @@ workspace:
 
 cloudResources:
   collections:
-    ../postman/collections/UBC_Business_App: 19505039-85d3c29a-ea12-41d3-abc2-3f8f515f2e0d
     ../postman/collections/UBC_Platform_Admin: 19505039-4255c2a6-e9c6-4096-abaf-37863602f80b
     ../postman/collections/UBC_Customer_App: 19505039-9c2920d4-0a33-49a6-91d9-d95603fff7e9
     ../postman/collections/UBC_Integration_Runner: 19505039-6cb01fac-8a3c-417a-8efd-0ab706faed7c
+    ../postman/collections/UBC_Business_App: 19505039-85d3c29a-ea12-41d3-abc2-3f8f515f2e0d
   environments:
     ../postman/environments/UBC_Local.environment.yaml: 19505039-a9a4188b-edd3-4b5c-aaa8-a38a866fb795
   globals: {}
