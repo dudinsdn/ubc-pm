@@ -1,0 +1,28 @@
+$kind: http-request
+name: Activate Tenant B untuk Skenario Staff
+url: "{{base_url}}/platform/tenants/{{tenant_b_id}}/status"
+method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "active",
+      "expected_version": {{tenant_b_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant B aktif untuk skenario Staff', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.status).to.equal('active');
+      });
+      pm.collectionVariables.set('tenant_b_version', body.version);
+    language: text/javascript
+order: 4503574000000000

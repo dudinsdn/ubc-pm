@@ -1,0 +1,25 @@
+$kind: http-request
+name: Create Transaction - kind kosong -> 400
+url: "{{base_url}}/businesses/{{business_id}}/transactions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "kind": "   ",
+      "amount": 10000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('400 Bad Request (kind kosong)', () => {
+          pm.expect(pm.response.code).to.equal(400);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33190

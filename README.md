@@ -6,6 +6,10 @@ REST API **Universal Business Core (UBC)**.
 Repository ini berisi collection, environment, dan konfigurasi Postman yang
 digunakan untuk pengujian API UBC.
 
+Peta ownership DTO dan aturan migrasi collection ada di
+[`DTO_OWNERSHIP.md`](DTO_OWNERSHIP.md). Migrasi folder DTO dilakukan bertahap
+agar runner integrasi yang sudah tervalidasi tidak rusak.
+
 ## Environment lokal
 
 Pilih environment **UBC Local** di Postman, lalu isi **local value**:
@@ -19,14 +23,24 @@ Collection mencoba bootstrap operator secara idempoten, lalu login dan menyimpan
 JWT platform sebagai collection variable `platform_access_token`. Token
 bootstrap tidak digunakan untuk endpoint control plane lainnya.
 
-Setelah environment aktif, tiga collection product boundary dapat dijalankan
-langsung dari Collection Runner tanpa menambahkan parameter lewat terminal:
+Setelah environment aktif, tiga collection product boundary dapat dibuka di
+Collection Runner. Setup lintas boundary dijalankan melalui
+`UBC_Integration_Runner`:
 
-- `UBC_Business_App` untuk API Tenant, Auth/Membership, Core, Workshop,
-  Laundry, dan kontrak offline-first;
-- `UBC_Platform_Admin` untuk control plane online-first;
-- `UBC_Customer_App` untuk identity linking, invitation/claim, login portal,
-  dan data Customer read-only.
+- `UBC_Business_App` untuk DTO Auth/Membership, Core, Workshop, Laundry,
+  offline-first, dan security;
+- `UBC_Platform_Admin` untuk DTO platform-auth, tenant lifecycle, subscription,
+  dan audit;
+- `UBC_Customer_App` untuk DTO identity-link, invitation, portal auth, dan
+  portal read-only;
+- `UBC_Integration_Runner` untuk flow berurutan yang membutuhkan setup
+  lintas boundary.
+
+Request di dalam ketiga collection tersebut kini dikelompokkan berdasarkan
+ownership DTO (`auth`, `core`, `subscriptions`, `identity-link`, dan seterusnya).
+`UBC_Integration_Runner` menyimpan flow end-to-end berurutan yang membutuhkan
+setup lintas boundary; jalankan runner ini untuk validasi perjalanan lengkap,
+bukan sebagai pengganti collection DTO.
 
 Setiap collection menyiapkan dependency minimumnya sendiri. Request setup yang
 menyentuh boundary lain bukan coverage utama collection tersebut.

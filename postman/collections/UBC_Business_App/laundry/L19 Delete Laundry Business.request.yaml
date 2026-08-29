@@ -1,0 +1,24 @@
+$kind: http-request
+name: L19 Delete Laundry Business
+url: "{{base_url}}/businesses/{{laundry_business_id}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{laundry_business_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Delete Laundry Business -> 204', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33940

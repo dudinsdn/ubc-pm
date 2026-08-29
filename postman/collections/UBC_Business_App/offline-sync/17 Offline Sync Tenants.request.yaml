@@ -1,0 +1,23 @@
+$kind: http-request
+name: 17 Offline Incremental Sync Tenants
+url: "{{base_url}}/tenants?cursor={{offline_sync_cursor}}"
+method: GET
+queryParams:
+  - key: cursor
+    value: "{{offline_sync_cursor}}"
+    disabled: false
+    description: Opaque cursor dari response sebelumnya
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline sync Tenants -> 200 and includes changed resource', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      pm.expect(body.items.some(item => item.id === pm.collectionVariables.get('tenant_id'))).to.be.true;
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 17000

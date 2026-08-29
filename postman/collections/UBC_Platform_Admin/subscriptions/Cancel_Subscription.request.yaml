@@ -1,0 +1,28 @@
+$kind: http-request
+name: Cancel Subscription
+url: "{{base_url}}/platform/tenants/{{platform_tenant_id}}/subscription"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{platform_subscription_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription dapat dibatalkan', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('platform_tenant_id'));
+        pm.expect(body.status).to.equal('cancelled');
+      });
+      pm.collectionVariables.set('platform_subscription_version', body.version);
+    language: text/javascript
+order: 12000

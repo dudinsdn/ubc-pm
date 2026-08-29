@@ -5,8 +5,8 @@ values:
   - key: platform_admin_token
     value: 3URtuIVMVP/tgxLbDPjpbG6Vfa4+ByRL+zOgTP32hn4=
   - key: platform_operator_email
-    value: operator@mail.xyz
+    value: operator@ubc.xyz
   - key: platform_operator_password
     value: password12345678
   - key: cors_allowed_origin
-    value: 'http://localhost:3000'
+    value: 'http://127.0.0.1:3000'

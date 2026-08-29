@@ -1,0 +1,27 @@
+$kind: http-request
+name: 14 Edit Customer Name
+url: "{{base_url}}/customers/{{customer_id}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Budi Santoso Updated",
+      "expected_version": {{customer_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Rename Customer -> 200 OK', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('customer_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 14000

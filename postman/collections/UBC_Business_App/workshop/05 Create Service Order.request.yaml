@@ -1,0 +1,32 @@
+$kind: http-request
+name: 05 Create Service Order
+url: "{{base_url}}/businesses/{{business_id}}/service-orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customer_id": "{{customer_id}}",
+      "description": "Ganti oli dan servis rem"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set('offline_sync_cursor', '00000000000000000000000000000000000000000000000000000000');
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Create ServiceOrder -> 201 Created', () => {
+          pm.expect(pm.response.code).to.equal(201);
+      });
+      pm.collectionVariables.set('service_order_id', body.id);
+      pm.collectionVariables.set('service_order_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 5000

@@ -1,0 +1,22 @@
+$kind: http-request
+name: 22 Offline Incremental Sync Relationships
+url: "{{base_url}}/businesses/{{business_id}}/relationships?cursor={{offline_sync_cursor}}"
+method: GET
+queryParams:
+  - key: cursor
+    value: "{{offline_sync_cursor}}"
+    disabled: false
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline sync Relationships -> 200 and includes changed resource', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.items.some(item => item.id === pm.collectionVariables.get('relationship_id'))).to.be.true;
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 22000

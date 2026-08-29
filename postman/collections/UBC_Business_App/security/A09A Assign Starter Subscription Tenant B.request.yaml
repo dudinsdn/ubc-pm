@@ -1,0 +1,27 @@
+$kind: http-request
+name: Assign Starter Subscription Tenant B
+url: "{{base_url}}/platform/tenants/{{tenant_b_id}}/subscription"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "plan_code": "starter",
+      "expected_version": null
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Starter subscription Tenant B aktif', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.plan_code).to.equal('starter');
+      });
+    language: text/javascript
+order: 4503573000000000

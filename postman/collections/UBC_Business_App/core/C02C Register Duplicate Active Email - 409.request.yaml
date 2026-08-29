@@ -1,0 +1,34 @@
+$kind: http-request
+name: Register Duplicate Active Email -> 409
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "tenant_id": "{{$guid}}",
+        "tenant_name": "UBC Duplicate Email Probe",
+        "user_id": "{{$guid}}",
+        "email": "{{auth_email}}",
+        "password": "password123",
+        "full_name": "Duplicate Email Probe",
+        "membership_id": "{{$guid}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('409 Conflict when active email is already registered', () => {
+          pm.expect(pm.response.code).to.equal(409);
+          pm.expect(body.error_code).to.equal('duplicate_email');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2900

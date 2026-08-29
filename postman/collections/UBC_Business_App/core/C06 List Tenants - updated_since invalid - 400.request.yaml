@@ -1,0 +1,20 @@
+$kind: http-request
+name: List Tenants - cursor invalid -> 400
+url: "{{base_url}}/tenants?cursor=bukan-cursor"
+method: GET
+queryParams:
+  cursor: bukan-cursor
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('400 Bad Request (opaque cursor)', () => {
+          pm.expect(pm.response.code).to.equal(400);
+          pm.expect(body.error_code).to.equal('invalid_sync_cursor');
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 33120

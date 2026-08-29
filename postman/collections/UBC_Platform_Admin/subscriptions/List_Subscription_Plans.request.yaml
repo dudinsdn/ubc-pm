@@ -1,0 +1,19 @@
+$kind: http-request
+name: List Subscription Plans
+url: "{{base_url}}/platform/subscription-plans"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform operator dapat melihat subscription plans', () => {
+        pm.expect(pm.response.code).to.equal(200);
+        pm.expect(body).to.be.an('array').that.is.not.empty;
+        pm.expect(body.some((plan) => plan.code === 'professional')).to.equal(true);
+      });
+    language: text/javascript
+order: 4250
