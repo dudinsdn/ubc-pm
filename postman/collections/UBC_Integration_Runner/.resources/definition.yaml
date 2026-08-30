@@ -14,12 +14,13 @@ description: |-
   opaque. Local database
   dan sync queue tetap merupakan tanggung jawab client, bukan backend.
 
-  Request Platform di awal hanya menyiapkan subscription dan aktivasi Tenant;
-  request tersebut bukan coverage control plane collection ini.
+  Request Platform mencakup setup, pembacaan control plane, audit, dan cleanup
+  subscription yang dibutuhkan untuk membuktikan perjalanan lintas produk.
 
   Request dipisahkan ke folder fase dependency-safe, termasuk fase Customer
-  Portal sebelum cleanup. Folder runner boleh melintasi boundary untuk setup
-  integrasi; product collection tetap DTO-only.
+  Portal sebelum cleanup serta Operations sebagai gate terakhir. Folder runner
+  boleh melintasi boundary untuk setup integrasi; product collection tetap
+  DTO-only.
 auth:
   type: bearer
   credentials:

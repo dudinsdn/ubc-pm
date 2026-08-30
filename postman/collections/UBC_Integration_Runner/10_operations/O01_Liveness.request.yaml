@@ -1,0 +1,21 @@
+$kind: http-request
+name: O01 Liveness
+url: "{{base_url}}/livez"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Liveness reports the API process as alive', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body).to.eql({ status: 'alive' });
+          pm.expect(pm.response.headers.get('x-request-id')).to.be.a('string').and.not.empty;
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4505001000000000

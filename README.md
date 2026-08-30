@@ -42,8 +42,9 @@ ownership DTO (`auth`, `core`, `subscriptions`, `identity-link`, dan seterusnya)
 `UBC_Integration_Runner` menyimpan flow end-to-end berurutan yang membutuhkan
 setup lintas boundary. Runner dibagi menjadi folder fase dependency-safe:
 onboarding/activation, Core flow, offline sync, Laundry, Workshop cross-tenant,
-negative contracts, Customer Portal, cleanup, lalu Auth/security. Jalankan runner ini untuk
-validasi perjalanan lengkap, bukan sebagai pengganti collection DTO.
+negative contracts, Customer Portal, cleanup, Auth/security, lalu Operations.
+Jalankan runner ini untuk validasi perjalanan lengkap, bukan sebagai pengganti
+collection DTO.
 
 Collection produk hanya memuat endpoint milik DTO/API boundary-nya. Setup yang
 menyentuh boundary lain dijalankan melalui `UBC_Integration_Runner` atau fixture

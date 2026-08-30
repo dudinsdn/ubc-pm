@@ -1,0 +1,25 @@
+$kind: http-request
+name: P03B Get Active Subscription
+url: "{{base_url}}/platform/tenants/{{tenant_id}}/subscription"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription Tenant dapat dibaca', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_id'));
+          pm.expect(body.plan_code).to.equal('professional');
+          pm.expect(body.status).to.equal('active');
+      });
+      pm.collectionVariables.set('subscription_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 2037

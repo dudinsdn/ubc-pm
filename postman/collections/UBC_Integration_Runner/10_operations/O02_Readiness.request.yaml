@@ -1,0 +1,21 @@
+$kind: http-request
+name: O02 Readiness
+url: "{{base_url}}/readyz"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Readiness confirms database availability during integration run', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body).to.eql({ status: 'ready' });
+          pm.expect(pm.response.headers.get('x-request-id')).to.be.a('string').and.not.empty;
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4505002000000000

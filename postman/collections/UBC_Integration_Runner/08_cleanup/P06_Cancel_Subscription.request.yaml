@@ -1,0 +1,32 @@
+$kind: http-request
+name: P06 Cancel Subscription
+url: "{{base_url}}/platform/tenants/{{tenant_id}}/subscription"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "expected_version": {{subscription_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription dibatalkan setelah cleanup Tenant selesai', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('tenant_id'));
+          pm.expect(body.status).to.equal('cancelled');
+      });
+      pm.collectionVariables.set('subscription_version', body.version);
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 41500

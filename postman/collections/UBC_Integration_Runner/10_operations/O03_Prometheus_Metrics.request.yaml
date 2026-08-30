@@ -1,0 +1,22 @@
+$kind: http-request
+name: O03 Prometheus Metrics
+url: "{{base_url}}/metrics"
+method: GET
+headers:
+  Accept: text/plain
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Metrics uses Prometheus text exposition', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(pm.response.headers.get('content-type')).to.include('text/plain');
+          pm.expect(pm.response.text()).to.include('# TYPE ubc_http_requests_total counter');
+          pm.expect(pm.response.text()).to.include('ubc_http_requests_in_flight');
+          pm.expect(pm.response.headers.get('x-request-id')).to.be.a('string').and.not.empty;
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 4505003000000000
