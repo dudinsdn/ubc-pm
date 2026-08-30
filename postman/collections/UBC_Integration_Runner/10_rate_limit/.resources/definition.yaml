@@ -1,0 +1,2 @@
+order: 10000
+description: Rate limit endpoint publik sensitif, dijalankan terisolasi karena window 60 detik.
