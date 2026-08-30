@@ -1,0 +1,23 @@
+$kind: http-request
+name: F04 Cancel Other Subscription
+url: "{{base_url}}/platform/tenants/{{other_tenant_id}}/subscription"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "expected_version": {{other_subscription_version}} }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Subscription Tenant lain dibatalkan', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(pm.response.json().status).to.equal('cancelled');
+      });
+    language: text/javascript
+order: 4504104000000000

@@ -42,9 +42,9 @@ ownership DTO (`auth`, `core`, `subscriptions`, `identity-link`, dan seterusnya)
 `UBC_Integration_Runner` menyimpan flow end-to-end berurutan yang membutuhkan
 setup lintas boundary. Runner dibagi menjadi folder fase dependency-safe:
 onboarding/activation, Core flow, offline sync, Laundry, Workshop cross-tenant,
-negative contracts, Customer Portal, cleanup, Auth/security, lalu Operations.
-Jalankan runner ini untuk validasi perjalanan lengkap, bukan sebagai pengganti
-collection DTO.
+negative contracts, Customer Portal, cleanup utama, Auth/security, rate-limit,
+final cleanup, lalu Operations. Jalankan runner ini untuk validasi perjalanan
+lengkap, bukan sebagai pengganti collection DTO.
 
 Collection produk hanya memuat endpoint milik DTO/API boundary-nya. Setup yang
 menyentuh boundary lain dijalankan melalui `UBC_Integration_Runner` atau fixture
@@ -80,9 +80,10 @@ perlindungan Owner terakhir, dan revocation token:
 - `A12A` memastikan token Staff lama ditolak `401 access_revoked` setelah role
   berubah lewat `A12`.
 - `S02`, `S03`, dan `S04` memeriksa payload 1 MiB serta CORS.
-- `S01 Rate Limit Login` harus dijalankan sebagai request terisolasi dengan
-  Collection Runner sebanyak 21 iterasi; iterasi ke-21 harus menghasilkan
-  `429 rate_limit_exceeded` dan `Retry-After: 60`.
+- Folder `10_rate_limit` dapat dijalankan terisolasi sebanyak 21 iterasi;
+  20 iterasi pertama memakai kredensial invalid dan menghasilkan `401`, lalu
+  iterasi ke-21 harus menghasilkan `429 rate_limit_exceeded` dan
+  `Retry-After: 60`.
 
 Pastikan `CORS_ALLOWED_ORIGINS` backend memuat nilai `cors_allowed_origin`
 sebelum menjalankan `S04`. Skenario security yang memakai rate limit dijalankan

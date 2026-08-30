@@ -1,0 +1,18 @@
+$kind: http-request
+name: S08 Platform Token Rejected By Business
+url: "{{base_url}}/tenants"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform JWT tidak diterima perimeter Business', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('token_invalid');
+      });
+    language: text/javascript
+order: 4504003000000000

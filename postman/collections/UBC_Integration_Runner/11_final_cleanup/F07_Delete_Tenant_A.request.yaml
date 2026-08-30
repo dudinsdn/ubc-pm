@@ -1,0 +1,22 @@
+$kind: http-request
+name: F07 Delete Tenant A
+url: "{{base_url}}/tenants/{{tenant_a_id}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "expected_version": {{tenant_a_version}} }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Tenant A dihapus', () => {
+          pm.expect(pm.response.code).to.equal(204);
+      });
+    language: text/javascript
+order: 4504107000000000

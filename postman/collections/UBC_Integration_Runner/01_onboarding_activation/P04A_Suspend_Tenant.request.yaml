@@ -1,0 +1,28 @@
+$kind: http-request
+name: P04A Suspend Tenant
+url: "{{base_url}}/platform/tenants/{{tenant_id}}/status"
+method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "suspended",
+      "expected_version": {{tenant_version}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform dapat menangguhkan Tenant aktif', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.status).to.equal('suspended');
+      });
+      pm.collectionVariables.set('tenant_version', body.version);
+    language: text/javascript
+order: 2042

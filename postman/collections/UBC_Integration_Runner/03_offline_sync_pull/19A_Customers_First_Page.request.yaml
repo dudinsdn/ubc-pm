@@ -1,0 +1,21 @@
+$kind: http-request
+name: 19A Customers First Page
+url: "{{base_url}}/businesses/{{business_id}}/customers?cursor=00000000000000000000000000000000000000000000000000000000&limit=1"
+method: GET
+queryParams:
+  cursor: "00000000000000000000000000000000000000000000000000000000"
+  limit: "1"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline Sync V2 menghasilkan halaman pertama dan cursor opaque', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.items).to.be.an('array').with.lengthOf(1);
+          pm.expect(body.has_more).to.equal(true);
+          pm.expect(body.next_cursor).to.match(/^[0-9a-f]{56}$/);
+      });
+      pm.collectionVariables.set('offline_page_first_id', body.items[0].id);
+      pm.collectionVariables.set('offline_page_cursor', body.next_cursor);
+    language: text/javascript
+order: 19500

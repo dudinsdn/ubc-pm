@@ -1,5 +1,5 @@
 $kind: http-request
-name: Security Rate Limit Login (11 Iterasi)
+name: Security Rate Limit Login (21 Iterasi)
 url: "{{base_url}}/auth/login"
 method: POST
 headers:
@@ -8,18 +8,18 @@ body:
   type: json
   content: |-
     {
-      "tenant_id": "{{tenant_a_id}}",
-      "email": "{{email}}",
-      "password": "password123"
+      "tenant_id": "00000000-0000-4000-8000-000000000001",
+      "email": "rate-limit-probe@invalid.local",
+      "password": "invalid-password"
     }
 scripts:
   - type: afterResponse
     code: |-
-      const expected = pm.info.iteration < 20 ? 200 : 429;
+      const expected = pm.info.iteration < 20 ? 401 : 429;
       pm.test('Rate limit login sesuai iterasi runner', () => {
           pm.expect(pm.response.code).to.equal(expected);
       });
-      if (pm.info.iteration >= 10) {
+      if (pm.info.iteration >= 20) {
           const body = pm.response.json();
           pm.expect(body.error_code).to.equal('rate_limit_exceeded');
           pm.expect(pm.response.headers.get('Retry-After')).to.equal('60');

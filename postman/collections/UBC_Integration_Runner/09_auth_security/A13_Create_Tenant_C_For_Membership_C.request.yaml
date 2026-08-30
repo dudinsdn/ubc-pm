@@ -23,6 +23,7 @@ scripts:
           pm.expect(pm.response.code).to.equal(201);
       });
       pm.collectionVariables.set('tenant_c_id', body.tenant.id);
+      pm.collectionVariables.set('tenant_c_version', body.tenant.version);
       pm.collectionVariables.set('admin_c_user_id', body.user.id);
   - type: beforeRequest
     code: |-

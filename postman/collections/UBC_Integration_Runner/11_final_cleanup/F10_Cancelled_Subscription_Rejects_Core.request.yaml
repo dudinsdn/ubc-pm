@@ -1,0 +1,18 @@
+$kind: http-request
+name: F10 Cancelled Subscription Rejects Core
+url: "{{base_url}}/tenants/{{tenant_b_id}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_b}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription cancelled menolak akses Core', () => {
+          pm.expect(pm.response.code).to.equal(403);
+          pm.expect(body.error_code).to.equal('active_subscription_required');
+      });
+    language: text/javascript
+order: 4504110000000000

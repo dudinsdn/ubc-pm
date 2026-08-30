@@ -1,0 +1,25 @@
+$kind: http-request
+name: F05 Assign Subscription Tenant A
+url: "{{base_url}}/platform/tenants/{{tenant_a_id}}/subscription"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "plan_code": "starter", "expected_version": null }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription sementara Tenant A aktif', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.status).to.equal('active');
+      });
+      pm.collectionVariables.set('tenant_a_subscription_version', body.version);
+    language: text/javascript
+order: 4504105000000000

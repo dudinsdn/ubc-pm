@@ -1,0 +1,18 @@
+$kind: http-request
+name: S07 Tenant Token Rejected By Platform
+url: "{{base_url}}/platform/subscription-plans"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_c}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant JWT tidak diterima perimeter Platform', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('platform_token_invalid');
+      });
+    language: text/javascript
+order: 4504002000000000

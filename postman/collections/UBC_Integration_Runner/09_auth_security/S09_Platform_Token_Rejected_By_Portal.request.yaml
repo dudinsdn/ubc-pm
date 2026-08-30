@@ -1,0 +1,18 @@
+$kind: http-request
+name: S09 Platform Token Rejected By Portal
+url: "{{base_url}}/customer-portal/profiles"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Platform JWT tidak diterima perimeter Customer Portal', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('portal_token_invalid');
+      });
+    language: text/javascript
+order: 4504004000000000

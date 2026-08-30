@@ -1,0 +1,22 @@
+$kind: http-request
+name: F13 Cancel Final Subscription Tenant B
+url: "{{base_url}}/platform/tenants/{{tenant_b_id}}/subscription"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "expected_version": {{tenant_b_subscription_version}} }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Subscription akhir Tenant B dibatalkan', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+    language: text/javascript
+order: 4504113000000000

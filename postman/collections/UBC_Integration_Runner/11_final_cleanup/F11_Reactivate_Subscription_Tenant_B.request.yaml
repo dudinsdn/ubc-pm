@@ -1,5 +1,5 @@
 $kind: http-request
-name: Assign Starter Subscription Tenant B
+name: F11 Reactivate Subscription Tenant B
 url: "{{base_url}}/platform/tenants/{{tenant_b_id}}/subscription"
 method: PUT
 auth:
@@ -11,18 +11,15 @@ headers:
 body:
   type: json
   content: |-
-    {
-      "plan_code": "starter",
-      "expected_version": null
-    }
+    { "plan_code": "starter", "expected_version": {{tenant_b_subscription_version}} }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Starter subscription Tenant B aktif', () => {
+      pm.test('Subscription Tenant B dapat diaktifkan kembali untuk cleanup', () => {
           pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body.plan_code).to.equal('starter');
+          pm.expect(body.status).to.equal('active');
       });
       pm.collectionVariables.set('tenant_b_subscription_version', body.version);
     language: text/javascript
-order: 4503573000000000
+order: 4504111000000000

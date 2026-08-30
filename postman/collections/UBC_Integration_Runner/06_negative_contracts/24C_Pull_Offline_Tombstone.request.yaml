@@ -1,0 +1,21 @@
+$kind: http-request
+name: 24C Pull Offline Tombstone
+url: "{{base_url}}/businesses/{{business_id}}/customers?cursor=00000000000000000000000000000000000000000000000000000000"
+method: GET
+queryParams:
+  cursor: "00000000000000000000000000000000000000000000000000000000"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline pull memuat tombstone hasil mutation batch', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          const tombstone = body.items.find((item) =>
+              item.id === pm.collectionVariables.get('offline_batch_customer_id')
+          );
+          pm.expect(tombstone).to.be.an('object');
+          pm.expect(tombstone.is_deleted).to.equal(true);
+          pm.expect(tombstone.version).to.equal(1);
+      });
+    language: text/javascript
+order: 23520

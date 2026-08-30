@@ -19,7 +19,13 @@ scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
+      pm.test('Business lintas Tenant dibuat sebagai fixture terverifikasi', () => {
+          pm.expect(pm.response.code).to.equal(201);
+          pm.expect(body.tenant_id).to.equal(pm.collectionVariables.get('other_tenant_id'));
+          pm.expect(body.name).to.equal('Bengkel Lain');
+      });
       pm.collectionVariables.set('other_business_id', body.id);
+      pm.collectionVariables.set('other_business_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true

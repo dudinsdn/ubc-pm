@@ -1,0 +1,19 @@
+$kind: http-request
+name: 19B Customers Next Page
+url: "{{base_url}}/businesses/{{business_id}}/customers?cursor={{offline_page_cursor}}&limit=1"
+method: GET
+queryParams:
+  cursor: "{{offline_page_cursor}}"
+  limit: "1"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline Sync V2 melanjutkan halaman tanpa mengulang item', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.items).to.be.an('array').with.lengthOf(1);
+          pm.expect(body.items[0].id).to.not.equal(pm.collectionVariables.get('offline_page_first_id'));
+          pm.expect(body.has_more).to.be.a('boolean');
+      });
+    language: text/javascript
+order: 19600

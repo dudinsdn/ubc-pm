@@ -1,0 +1,18 @@
+$kind: http-request
+name: W10A Starter Allows Workshop
+url: "{{base_url}}/businesses/{{other_business_id}}/service-orders"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token_other_tenant}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Starter plan memiliki capability Workshop', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.items).to.be.an('array').that.is.empty;
+      });
+    language: text/javascript
+order: 23482

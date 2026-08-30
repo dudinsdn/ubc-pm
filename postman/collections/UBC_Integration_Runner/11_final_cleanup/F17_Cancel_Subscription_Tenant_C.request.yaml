@@ -1,0 +1,22 @@
+$kind: http-request
+name: F17 Cancel Subscription Tenant C
+url: "{{base_url}}/platform/tenants/{{tenant_c_id}}/subscription"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "expected_version": {{tenant_c_subscription_version}} }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Subscription Tenant C dibatalkan', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+    language: text/javascript
+order: 4504117000000000

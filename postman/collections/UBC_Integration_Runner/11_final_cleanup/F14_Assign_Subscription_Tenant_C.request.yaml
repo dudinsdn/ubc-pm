@@ -1,0 +1,24 @@
+$kind: http-request
+name: F14 Assign Subscription Tenant C
+url: "{{base_url}}/platform/tenants/{{tenant_c_id}}/subscription"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "plan_code": "starter", "expected_version": null }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Subscription sementara Tenant C aktif', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('tenant_c_subscription_version', body.version);
+    language: text/javascript
+order: 4504114000000000

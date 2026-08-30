@@ -18,9 +18,9 @@ description: |-
   subscription yang dibutuhkan untuk membuktikan perjalanan lintas produk.
 
   Request dipisahkan ke folder fase dependency-safe, termasuk fase Customer
-  Portal sebelum cleanup serta Operations sebagai gate terakhir. Folder runner
-  boleh melintasi boundary untuk setup integrasi; product collection tetap
-  DTO-only.
+  Portal sebelum cleanup, Auth/security, rate-limit terpisah, final cleanup,
+  serta Operations sebagai gate terakhir. Folder runner boleh melintasi
+  boundary untuk setup integrasi; product collection tetap DTO-only.
 auth:
   type: bearer
   credentials:
@@ -62,6 +62,8 @@ variables:
   relationship_version: ""
   relationship_id: ""
   offline_sync_cursor: ""
+  offline_page_cursor: ""
+  offline_page_first_id: ""
   offline_transaction_id: ""
   offline_occurred_at: ""
   offline_batch_id: ""
@@ -73,7 +75,10 @@ variables:
   other_owner_email: ""
   other_owner_user_id: ""
   other_business_id: ""
+  other_business_version: ""
   other_transaction_id: ""
+  other_transaction_version: ""
+  other_subscription_version: ""
   admin_email: ""
   admin_user_id: ""
   admin_b_email: ""
@@ -84,8 +89,12 @@ variables:
   user_id: ""
   user_version: ""
   tenant_a_id: ""
+  tenant_a_version: ""
+  tenant_a_subscription_version: ""
   tenant_b_id: ""
   tenant_c_id: ""
+  tenant_c_version: ""
+  tenant_c_subscription_version: ""
   membership_a_id: ""
   membership_a_version: ""
   membership_b_id: ""
@@ -113,6 +122,7 @@ variables:
   platform_access_token: ""
   subscription_version: ""
   tenant_b_version: ""
+  tenant_b_subscription_version: ""
   token_staff_b: ""
 scripts:
   - type: http:beforeRequest

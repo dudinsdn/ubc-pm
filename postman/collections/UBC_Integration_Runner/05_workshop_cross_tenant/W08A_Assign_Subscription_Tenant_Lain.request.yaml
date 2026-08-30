@@ -25,6 +25,7 @@ scripts:
         pm.expect(body.plan_code).to.equal('starter');
         pm.expect(body.status).to.equal('active');
       });
+      pm.collectionVariables.set('other_subscription_version', body.version);
     language: text/javascript
 settings:
   followRedirects: true

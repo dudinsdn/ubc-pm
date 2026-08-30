@@ -4,6 +4,7 @@ url: "{{base_url}}/livez"
 method: GET
 headers:
   Accept: application/json
+  X-Request-ID: ubc-integration-request-id
 scripts:
   - type: afterResponse
     code: |-
@@ -11,7 +12,7 @@ scripts:
       pm.test('Liveness reports the API process as alive', () => {
           pm.expect(pm.response.code).to.equal(200);
           pm.expect(body).to.eql({ status: 'alive' });
-          pm.expect(pm.response.headers.get('x-request-id')).to.be.a('string').and.not.empty;
+          pm.expect(pm.response.headers.get('x-request-id')).to.equal('ubc-integration-request-id');
       });
     language: text/javascript
 settings:

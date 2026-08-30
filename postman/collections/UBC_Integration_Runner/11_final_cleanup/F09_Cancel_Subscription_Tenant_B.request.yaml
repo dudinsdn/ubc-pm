@@ -1,7 +1,7 @@
 $kind: http-request
-name: Assign Starter Subscription Tenant B
+name: F09 Cancel Subscription Tenant B
 url: "{{base_url}}/platform/tenants/{{tenant_b_id}}/subscription"
-method: PUT
+method: DELETE
 auth:
   type: bearer
   credentials:
@@ -11,18 +11,15 @@ headers:
 body:
   type: json
   content: |-
-    {
-      "plan_code": "starter",
-      "expected_version": null
-    }
+    { "expected_version": {{tenant_b_subscription_version}} }
 scripts:
   - type: afterResponse
     code: |-
       const body = pm.response.json();
-      pm.test('Starter subscription Tenant B aktif', () => {
+      pm.test('Subscription Tenant B dibatalkan', () => {
           pm.expect(pm.response.code).to.equal(200);
-          pm.expect(body.plan_code).to.equal('starter');
+          pm.expect(body.status).to.equal('cancelled');
       });
       pm.collectionVariables.set('tenant_b_subscription_version', body.version);
     language: text/javascript
-order: 4503573000000000
+order: 4504109000000000

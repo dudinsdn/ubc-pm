@@ -1,0 +1,24 @@
+$kind: http-request
+name: F06 Activate Tenant A
+url: "{{base_url}}/platform/tenants/{{tenant_a_id}}/status"
+method: PATCH
+auth:
+  type: bearer
+  credentials:
+    token: "{{platform_access_token}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    { "status": "active", "expected_version": {{tenant_a_version}} }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Tenant A diaktifkan untuk cleanup terautentikasi', () => {
+          pm.expect(pm.response.code).to.equal(200);
+      });
+      pm.collectionVariables.set('tenant_a_version', body.version);
+    language: text/javascript
+order: 4504106000000000

@@ -1,0 +1,39 @@
+$kind: http-request
+name: 24B Replay Offline Mutation Batch
+url: "{{base_url}}/businesses/{{business_id}}/sync/mutations"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "batch_id": "{{offline_batch_id}}",
+      "operations": [
+        {
+          "operation_id": "{{offline_operation_create_id}}",
+          "type": "create_customer",
+          "entity_id": "{{offline_batch_customer_id}}",
+          "name": "Offline Batch Customer",
+          "phone": null
+        },
+        {
+          "operation_id": "{{offline_operation_delete_id}}",
+          "type": "delete_customer",
+          "entity_id": "{{offline_batch_customer_id}}",
+          "expected_version": 0
+        }
+      ]
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Replay mutation batch mengembalikan receipt yang sama', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.batch_id).to.equal(pm.collectionVariables.get('offline_batch_id'));
+          pm.expect(body.replayed).to.equal(true);
+          pm.expect(body.results).to.have.length(2);
+      });
+    language: text/javascript
+order: 23510
