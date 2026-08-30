@@ -1,14 +1,11 @@
 $kind: collection
 name: UBC Customer App
 description: |-
-  Collection Customer App online-first: identity linking, invitation lifecycle,
-  claim single-use, portal login, token isolation, profil tertaut, dan transaksi
-  Customer read-only. Register, aktivasi Tenant, dan mutation Business/Customer
-  hanya menjadi setup fixture bagi boundary Customer App.
+  Suite negative mandiri untuk DTO Customer App: missing Tenant JWT pada identity
+  handoff/invitation, invalid Portal credentials/claim token, dan missing Portal
+  JWT pada read-only API. Tidak ada setup Business atau Platform di sini.
 
-  Gunakan environment UBC Local dan isi local value untuk
-  platform_admin_token, platform_operator_email, dan
-  platform_operator_password. Collection tidak menyimpan secret.
+  Happy path Customer Portal tetap berada di UBC_Integration_Runner sementara.
 auth:
   type: bearer
   credentials:

@@ -1,0 +1,23 @@
+$kind: http-request
+name: Register Invalid Tenant Name
+url: "{{base_url}}/register"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {"tenant_name":"   ","email":"negative@example.com","password":"password123","full_name":"Negative Owner"}
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Invalid Tenant name returns structured 400', () => {
+          pm.expect(pm.response.code).to.equal(400);
+          pm.expect(body.error_code).to.be.a('string').and.not.empty;
+          pm.expect(body.error).to.be.a('string').and.not.empty;
+      });
+    language: text/javascript
+order: 1000

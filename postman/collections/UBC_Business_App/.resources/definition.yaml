@@ -1,28 +1,62 @@
 $kind: collection
-name: UBC_Business_App
+name: UBC Business App
 description: |-
-  Alur bisnis lengkap dan mandiri: register, login, Service Order,
-  Transaction, Relationship, Interaction, Laundry Order, Auth/Membership,
-  negative cases, offline retry/sync, dan cleanup berurutan.
+  Suite negative mandiri untuk DTO Business App. Seluruh request memverifikasi
+  invalid input, invalid credentials, missing Tenant JWT, atau security error
+  tanpa membuat fixture dan tanpa memanggil endpoint Platform/Customer.
 
-  Collection melakukan onboarding publik lewat POST /register untuk membuat
-  Tenant + User + Owner sekaligus. JWT hasil login serta seluruh ID dan version
-  disimpan sebagai collection variables untuk request berikutnya.
-
-  Fase offline mensimulasikan client-generated ID, replay antrean yang
-  idempotent, dan incremental pull berdasarkan cursor RFC 3339. Local database
-  dan sync queue tetap merupakan tanggung jawab client, bukan backend.
-
-  Request Platform di awal hanya menyiapkan subscription dan aktivasi Tenant;
-  request tersebut bukan coverage control plane collection ini.
+  Happy path dan negative integration yang membutuhkan state tetap berada di
+  UBC_Integration_Runner sampai fixture seeder tersedia.
 variables:
-  email: ""
-  pwd: ""
+  base_url: http://localhost:3000
+  token: ""
+  token_b: ""
+  token_c: ""
+  token_staff_b: ""
   tenant_id: ""
   tenant_version: ""
+  tenant_b_id: ""
+  tenant_b_version: ""
+  tenant_c_id: ""
+  business_id: ""
+  business_version: ""
+  customer_id: ""
+  customer_version: ""
+  customer_b_id: ""
+  customer_b_version: ""
+  service_order_id: ""
+  service_order_version: ""
+  service_order_cancel_id: ""
+  service_order_cancel_version: ""
+  service_order_err_id: ""
+  service_order_err_version: ""
+  transaction_id: ""
+  transaction_version: ""
+  interaction_id: ""
+  interaction_version: ""
+  relationship_id: ""
+  relationship_version: ""
+  offline_sync_cursor: ""
+  offline_transaction_id: ""
+  offline_occurred_at: ""
+  membership_b_id: ""
+  membership_b_version: ""
+  membership_demo_id: ""
+  membership_demo_version: ""
+  admin_b_email: ""
+  admin_c_email: ""
+  laundry_transaction_id: ""
+  laundry_order_id: ""
+  laundry_receipt_number: ""
+  laundry_sync_cursor: ""
+  laundry_cancel_order_id: ""
+  laundry_cancel_receipt_number: ""
+  laundry_invalid_receipt_number: ""
+  uuid_404: ""
+  email: ""
+  pwd: ""
   user_id: ""
   membership_id: ""
-  token: ""
   user_version: ""
   membership_version: ""
   other_email: ""
@@ -31,6 +65,41 @@ variables:
   other_tenant_version: ""
   other_user_id: ""
   other_membership_id: ""
-  base_url: ""
+  admin_b_user_id: ""
+  admin_c_user_id: ""
+  offline_batch_id: ""
+  offline_operation_create_id: ""
+  offline_operation_delete_id: ""
+  offline_batch_customer_id: ""
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      pm.collectionVariables.set('uuid_404', uuidv7());
+
+      function uuidv7() {
+          const timestamp = Date.now();
+          const bytes = new Uint8Array(16);
+          for (let i = 0; i < 16; i++) {
+              bytes[i] = Math.floor(Math.random() * 256);
+          }
+          bytes[0] = Math.floor(timestamp / 2 ** 40) & 0xff;
+          bytes[1] = Math.floor(timestamp / 2 ** 32) & 0xff;
+          bytes[2] = Math.floor(timestamp / 2 ** 24) & 0xff;
+          bytes[3] = Math.floor(timestamp / 2 ** 16) & 0xff;
+          bytes[4] = Math.floor(timestamp / 2 ** 8) & 0xff;
+          bytes[5] = timestamp & 0xff;
+          bytes[6] = (bytes[6] & 0x0f) | 0x70;
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+          const hex = Array.from(bytes)
+              .map(byte => byte.toString(16).padStart(2, '0'))
+              .join('');
+          return [
+              hex.slice(0, 8), hex.slice(8, 12), hex.slice(12, 16),
+              hex.slice(16, 20), hex.slice(20, 32)
+          ].join('-');
+      }
+    language: text/javascript

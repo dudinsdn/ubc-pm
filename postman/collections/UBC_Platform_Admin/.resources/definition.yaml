@@ -1,13 +1,13 @@
 $kind: collection
 name: UBC Platform Admin
 description: |-
-  Collection khusus Platform Admin untuk operator authentication, Tenant
-  lifecycle, plans/subscriptions, entitlements, dan audit trail.
+  Suite negative mandiri untuk DTO Platform Admin: bootstrap/login invalid serta
+  missing Platform JWT pada lifecycle, subscription, dan audit. Tidak ada
+  fixture atau endpoint Business/Customer di collection ini.
 
-  Pilih environment `UBC Local` dan isi local value `platform_admin_token`
-  dengan nilai `PLATFORM_ADMIN_TOKEN` dari backend. Token tidak disimpan di
-  collection dan tidak perlu diteruskan melalui terminal.
+  Happy path Platform tetap berada di UBC_Integration_Runner sementara.
 variables:
   platform_access_token: ""
+  platform_subscription_version: ""
 auth:
   type: noauth

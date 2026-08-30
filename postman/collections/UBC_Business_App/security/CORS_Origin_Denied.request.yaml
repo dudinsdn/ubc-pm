@@ -1,0 +1,23 @@
+$kind: http-request
+name: CORS Origin Denied
+url: "{{base_url}}/auth/login"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+  Origin: https://untrusted.invalid
+body:
+  type: json
+  content: |-
+    {"tenant_id":"00000000-0000-4000-8000-000000000001","email":"missing@example.com","password":"wrong-password"}
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Untrusted CORS origin is rejected', () => {
+          pm.expect(pm.response.code).to.equal(403);
+          pm.expect(body.error_code).to.equal('cors_origin_denied');
+      });
+    language: text/javascript
+order: 7000

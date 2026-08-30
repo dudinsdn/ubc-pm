@@ -33,17 +33,21 @@ Collection Runner. Setup lintas boundary dijalankan melalui
   dan audit;
 - `UBC_Customer_App` untuk DTO identity-link, invitation, portal auth, dan
   portal read-only;
+- `UBC_Operations` untuk liveness, readiness, dan metrics milik adapter API;
 - `UBC_Integration_Runner` untuk flow berurutan yang membutuhkan setup
   lintas boundary.
 
 Request di dalam ketiga collection tersebut kini dikelompokkan berdasarkan
 ownership DTO (`auth`, `core`, `subscriptions`, `identity-link`, dan seterusnya).
 `UBC_Integration_Runner` menyimpan flow end-to-end berurutan yang membutuhkan
-setup lintas boundary; jalankan runner ini untuk validasi perjalanan lengkap,
-bukan sebagai pengganti collection DTO.
+setup lintas boundary. Runner dibagi menjadi folder fase dependency-safe:
+onboarding/activation, Core flow, offline sync, Laundry, Workshop cross-tenant,
+negative contracts, Customer Portal, cleanup, lalu Auth/security. Jalankan runner ini untuk
+validasi perjalanan lengkap, bukan sebagai pengganti collection DTO.
 
-Setiap collection menyiapkan dependency minimumnya sendiri. Request setup yang
-menyentuh boundary lain bukan coverage utama collection tersebut.
+Collection produk hanya memuat endpoint milik DTO/API boundary-nya. Setup yang
+menyentuh boundary lain dijalankan melalui `UBC_Integration_Runner` atau fixture
+yang disediakan secara eksplisit.
 
 ## Usage
 
@@ -53,20 +57,16 @@ environment yang sesuai dan jalankan collection yang tersedia.
 Collection mengikuti kontrak API UBC dan digunakan untuk pengujian endpoint,
 response, assertion, serta flow antar resource.
 
-`UBC_Business_App` menjalankan flow bisnis lengkap, termasuk Core, Auth,
-Workshop, Laundry, idempotency, optimistic concurrency, negative cases,
-incremental sync, dan cleanup berurutan. Bootstrap Platform, subscription, dan
-aktivasi Tenant hanya berfungsi sebagai setup agar collection mandiri.
+Untuk sementara, tiga product collection berisi negative/error-response yang
+dapat berjalan tanpa fixture: invalid payload/credentials dan missing token pada
+DTO masing-masing. Happy path, optimistic concurrency, cross-tenant, entitlement,
+dan lifecycle ber-state tetap berada di `UBC_Integration_Runner`.
 
-`UBC_Platform_Admin` mencakup bootstrap/login operator, daftar dan detail
-Tenant, subscription plans, assignment/read/cancel subscription, lifecycle
-Tenant, audit events, serta pemeriksaan access gate dari sisi Business App.
+Product collection tidak membuat atau membagikan resource lintas boundary;
+karena itu setiap run tidak bergantung pada collection variables dari run lain.
 
-`UBC_Customer_App` mencakup setup Business/Customer/Transaction, direct identity
-linking, invitation create/revoke/claim, replay protection, portal login dengan
-JWT terpisah, isolasi token, daftar profil, dan transaksi read-only. Mutation
-Customer tetap dilakukan oleh Owner sebagai setup Business App; Customer App
-tidak memiliki endpoint mutation Customer.
+`UBC_Operations` berdiri sendiri agar endpoint operasional yang tidak memiliki
+DTO produk tidak tercampur ke Business, Platform, Customer, atau integration flow.
 
 ## Security hardening scenarios
 

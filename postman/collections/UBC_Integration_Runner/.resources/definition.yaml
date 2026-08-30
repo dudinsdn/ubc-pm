@@ -9,12 +9,17 @@ description: |-
   Tenant + User + Owner sekaligus. JWT hasil login serta seluruh ID dan version
   disimpan sebagai collection variables untuk request berikutnya.
 
-  Fase offline mensimulasikan client-generated ID, replay antrean yang
-  idempotent, dan incremental pull berdasarkan cursor RFC 3339. Local database
+  Fase offline mensimulasikan client-generated ID, push mutation batch,
+  replay antrean yang idempotent, dan incremental pull berdasarkan cursor
+  opaque. Local database
   dan sync queue tetap merupakan tanggung jawab client, bukan backend.
 
   Request Platform di awal hanya menyiapkan subscription dan aktivasi Tenant;
   request tersebut bukan coverage control plane collection ini.
+
+  Request dipisahkan ke folder fase dependency-safe, termasuk fase Customer
+  Portal sebelum cleanup. Folder runner boleh melintasi boundary untuk setup
+  integrasi; product collection tetap DTO-only.
 auth:
   type: bearer
   credentials:
@@ -58,6 +63,10 @@ variables:
   offline_sync_cursor: ""
   offline_transaction_id: ""
   offline_occurred_at: ""
+  offline_batch_id: ""
+  offline_operation_create_id: ""
+  offline_operation_delete_id: ""
+  offline_batch_customer_id: ""
   other_tenant_id: ""
   other_tenant_version: ""
   other_owner_email: ""

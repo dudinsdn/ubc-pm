@@ -1,0 +1,22 @@
+$kind: http-request
+name: Invitation Create Missing Tenant Token
+url: "{{base_url}}/businesses/00000000-0000-4000-8000-000000000001/customers/00000000-0000-4000-8000-000000000002/portal-invitations"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {"email":"negative-customer@example.com"}
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Invitation creation rejects missing Tenant JWT', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('missing_token');
+      });
+    language: text/javascript
+order: 2000

@@ -1,0 +1,52 @@
+$kind: http-request
+name: 24A Apply Offline Mutation Batch
+url: "{{base_url}}/businesses/{{business_id}}/sync/mutations"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "batch_id": "{{offline_batch_id}}",
+      "operations": [
+        {
+          "operation_id": "{{offline_operation_create_id}}",
+          "type": "create_customer",
+          "entity_id": "{{offline_batch_customer_id}}",
+          "name": "Offline Batch Customer",
+          "phone": null
+        },
+        {
+          "operation_id": "{{offline_operation_delete_id}}",
+          "type": "delete_customer",
+          "entity_id": "{{offline_batch_customer_id}}",
+          "expected_version": 0
+        }
+      ]
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      pm.collectionVariables.set('offline_batch_id', pm.variables.replaceIn('{{$guid}}'));
+      pm.collectionVariables.set('offline_operation_create_id', pm.variables.replaceIn('{{$guid}}'));
+      pm.collectionVariables.set('offline_operation_delete_id', pm.variables.replaceIn('{{$guid}}'));
+      pm.collectionVariables.set('offline_batch_customer_id', pm.variables.replaceIn('{{$guid}}'));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline mutation batch applies sequential create and delete operations', () => {
+          pm.expect(pm.response.code).to.equal(200);
+          pm.expect(body.batch_id).to.equal(pm.collectionVariables.get('offline_batch_id'));
+          pm.expect(body.replayed).to.equal(false);
+          pm.expect(body.results).to.have.length(2);
+          pm.expect(body.results[0]).to.include({ outcome: 'applied', server_version: 0, server_deleted: false });
+          pm.expect(body.results[1]).to.include({ outcome: 'applied', server_version: 1, server_deleted: true });
+      });
+    language: text/javascript
+settings:
+  followRedirects: true
+  disableUrlEncoding: false
+  disableCookies: false
+order: 23500

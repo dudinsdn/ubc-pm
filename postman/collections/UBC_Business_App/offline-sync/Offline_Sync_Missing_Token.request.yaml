@@ -1,0 +1,22 @@
+$kind: http-request
+name: Offline Sync Missing Token
+url: "{{base_url}}/businesses/00000000-0000-4000-8000-000000000001/sync/mutations"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {"batch_id":"00000000-0000-4000-8000-000000000002","operations":[]}
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Offline Sync rejects missing Tenant JWT before payload processing', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('missing_token');
+      });
+    language: text/javascript
+order: 6000

@@ -1,0 +1,16 @@
+$kind: http-request
+name: Laundry Missing Token
+url: "{{base_url}}/businesses/00000000-0000-4000-8000-000000000001/laundry-orders"
+method: GET
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Laundry rejects missing Tenant JWT', () => {
+          pm.expect(pm.response.code).to.equal(401);
+          pm.expect(body.error_code).to.equal('missing_token');
+      });
+    language: text/javascript
+order: 5000

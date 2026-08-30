@@ -1,0 +1,9 @@
+$kind: collection
+name: UBC Operations
+description: |-
+  Collection netral untuk endpoint operasional API. Endpoint ini dimiliki
+  adapter API, tidak memakai DTO atau token Business, Platform, maupun Portal.
+auth:
+  type: noauth
+variables:
+  base_url: http://localhost:3000

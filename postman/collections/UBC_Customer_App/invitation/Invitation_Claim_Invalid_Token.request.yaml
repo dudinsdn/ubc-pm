@@ -1,0 +1,22 @@
+$kind: http-request
+name: Invitation Claim Invalid Token
+url: "{{base_url}}/customer-portal/invitations/claim"
+method: POST
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {"token":"invalid-invitation-token","password":"password123","full_name":"Negative Portal User"}
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = pm.response.json();
+      pm.test('Unknown invitation token returns 404', () => {
+          pm.expect(pm.response.code).to.equal(404);
+          pm.expect(body.error_code).to.equal('portal_invitation_not_found');
+      });
+    language: text/javascript
+order: 4000
